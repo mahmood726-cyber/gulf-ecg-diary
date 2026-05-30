@@ -149,6 +149,7 @@
   .slider-amount{font-family:var(--serif);font-size:2.6rem;font-weight:600;color:var(--brand-dk);text-align:center;min-height:1.2em}
   .slider-amount.empty{color:#bcccce;font-size:1.25rem;font-family:var(--sans)}
   input[type=range]{width:100%;accent-color:var(--brand);height:32px}
+  input[type=range].pristine{accent-color:#cbd8db;filter:grayscale(.5)}
   .slider-ends{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-top:2px}
   .amount-entry{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:10px}
   .amount-entry input{width:120px;text-align:center}
@@ -182,7 +183,8 @@
   .accordion>div{padding:0 17px 16px;color:#455c64;font-size:.94rem}
   .modal-bg{position:fixed;inset:0;background:rgba(18,48,61,.5);display:flex;align-items:center;justify-content:center;z-index:90;padding:18px}
   .modal{background:#fff;border-radius:16px;max-width:540px;width:100%;padding:26px;box-shadow:var(--shadow);max-height:90vh;overflow:auto}
-  .upload-drop{border:2px dashed var(--line2);border-radius:13px;padding:28px;text-align:center;background:#fafcfb;cursor:pointer}
+  .upload-drop{border:2px dashed var(--line2);border-radius:13px;padding:28px;text-align:center;background:#fafcfb;cursor:pointer;width:100%;display:block;font:inherit;color:var(--ink)}
+  .upload-drop:focus-visible{outline:3px solid var(--brand-soft);border-color:var(--brand)}
   .upload-drop:hover{border-color:var(--brand);background:var(--brand-soft)}
   .list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);font-size:.9rem}
   .list-row:last-child{border-bottom:0}
@@ -534,14 +536,18 @@ const I18N={
   f_desc:'Briefly describe your symptoms (optional)',yes:'Yes',no:'No',
   redflag_h:'Important safety questions',
   redflag_intro:'Please answer honestly. If any of these apply, this service is not suitable and you should seek urgent care.',
-  rf:['Are you currently having chest pain, pressure, heaviness, or tightness?','Have you fainted, collapsed, or nearly collapsed?','Are you severely breathless at rest?','Do you have weakness of one side of the body, facial droop, speech difficulty, or possible stroke symptoms?','Do you feel extremely unwell or unsafe at home?','Have you been told you have an unstable or serious heart condition needing urgent care?','Have you had a recent hospital admission for heart symptoms?','Are you seeking help for an emergency now?'],
+  rf:['Are you currently having chest pain, pressure, heaviness, or tightness?','Have you fainted, collapsed, or nearly collapsed?','Are you severely breathless at rest?','Do you have weakness of one side of the body, facial droop, speech difficulty, or possible stroke symptoms?','Do you feel extremely unwell or unsafe at home?','Have you been told you have an unstable or serious heart condition needing urgent care?','Have you had a recent hospital admission for heart symptoms?','Are you seeking help for an emergency now?','Are your palpitations happening right now and not settling?'],
+  excl_h:'A few more questions',excl_intro:'These do not mean an emergency, but they may mean an online ECG diary is not the right first step for you.',
+  excl:['Are you pregnant, or could you be?','Do you have a pacemaker or an implanted defibrillator (ICD)?','Has a close family member died suddenly of a heart problem, or do your palpitations come on with physical exertion?'],
+  refer_h:'Best handled by your own doctor first',refer_p:'Your answers suggest you should speak with your local doctor or cardiologist before using an online ECG diary. This is not an emergency, but a clinician who knows your history should guide the next step.',
+  age_h:'This service is for adults',age_p:'This ECG diary is intended for people aged 18 and over. For a child or teenager with palpitations, please arrange review through a local doctor or paediatric service.',
   elig_submit:'Check my eligibility',elig_need:'Please complete all required questions, including every safety question.',
   ns_h:'This service is not suitable for your symptoms',
   ns_p:'Based on your answers, you should not use this non-emergency ECG diary. Please seek urgent medical care through your local emergency services or your nearest emergency department now.',
   ns_emergency:'If you feel this is an emergency, contact your local emergency services immediately.',
   ns_back:'Back to home',
   res_h:'You can continue',res_p:'Your answers suggest this may be suitable for a non-emergency ECG diary review. You can continue to payment and upload your ECGs.',res_continue:'Continue to payment',
-  payp_h:'Choose your amount',payp_sub:'Minimum £1 — Maximum £149',payp_move:'Move the slider or type an amount',payp_selected:'Selected amount',payp_or:'or enter exactly',payp_continue:'Continue to secure payment',
+  payp_h:'Choose your amount',payp_sub:'Minimum £1 — Maximum £149',payp_move:'Move the slider or type an amount',payp_selected:'Selected amount',payp_or:'or enter exactly',payp_continue:'Continue to secure payment',payp_local_note:'Charged in GBP. Local amounts shown are approximate.',
   payp_buying_h:'What you are buying',payp_buying:'One 7-day clinician-reviewed ECG diary episode: up to 20 single-lead ECG uploads and one consolidated clinician summary report.',
   payp_pay_now:'Pay (test mode)',payp_processing:'Processing secure payment…',
   payp_cap_full:'Monthly clinician review capacity is currently full. Because every ECG is reviewed by a clinician, new uploads are paused until more review capacity becomes available.',
@@ -631,13 +637,17 @@ const I18N={
   f_device:'أي جهاز تستخدم؟',dev_km:'KardiaMobile',dev_km6:'KardiaMobile 6L',dev_aw:'تخطيط Apple Watch',dev_other:'جهاز أحادي الاشتقاق آخر',dev_ns:'غير متأكد',
   f_desc:'صف أعراضك باختصار (اختياري)',yes:'نعم',no:'لا',
   redflag_h:'أسئلة مهمة للسلامة',redflag_intro:'يرجى الإجابة بصدق. إذا انطبق أي مما يلي فإن الخدمة غير مناسبة وعليك طلب الرعاية العاجلة.',
-  rf:['هل تعاني حالياً من ألم أو ضغط أو ثقل أو ضيق في الصدر؟','هل أُغمي عليك أو فقدت وعيك أو كدت أن تفقده؟','هل تعاني من ضيق شديد في التنفّس أثناء الراحة؟','هل لديك ضعف في أحد جانبي الجسم أو تدلٍّ في الوجه أو صعوبة في الكلام أو أعراض سكتة محتملة؟','هل تشعر بتوعّك شديد أو بعدم الأمان في المنزل؟','هل قيل لك إن لديك حالة قلبية غير مستقرّة أو خطيرة تحتاج رعاية عاجلة؟','هل دخلت المستشفى مؤخراً بسبب أعراض قلبية؟','هل تطلب المساعدة لحالة طارئة الآن؟'],
+  rf:['هل تعاني حالياً من ألم أو ضغط أو ثقل أو ضيق في الصدر؟','هل أُغمي عليك أو فقدت وعيك أو كدت أن تفقده؟','هل تعاني من ضيق شديد في التنفّس أثناء الراحة؟','هل لديك ضعف في أحد جانبي الجسم أو تدلٍّ في الوجه أو صعوبة في الكلام أو أعراض سكتة محتملة؟','هل تشعر بتوعّك شديد أو بعدم الأمان في المنزل؟','هل قيل لك إن لديك حالة قلبية غير مستقرّة أو خطيرة تحتاج رعاية عاجلة؟','هل دخلت المستشفى مؤخراً بسبب أعراض قلبية؟','هل تطلب المساعدة لحالة طارئة الآن؟','هل يحدث الخفقان لديك الآن ولا يهدأ؟'],
+  excl_h:'بضعة أسئلة إضافية',excl_intro:'هذه لا تعني حالة طارئة، لكنها قد تعني أن مذكرة التخطيط الإلكترونية ليست الخطوة الأولى المناسبة لك.',
+  excl:['هل أنتِ حامل أو من المحتمل أن تكوني حاملاً؟','هل لديك جهاز تنظيم ضربات القلب أو مزيل رجفان مزروع (ICD)؟','هل توفّي أحد أقاربك المقرّبين فجأة بسبب مشكلة قلبية، أو هل يبدأ الخفقان لديك مع المجهود البدني؟'],
+  refer_h:'يُفضّل أن يتولّاها طبيبك أولاً',refer_p:'تشير إجاباتك إلى أنه ينبغي أن تتحدّث مع طبيبك المحلي أو طبيب القلب قبل استخدام مذكرة تخطيط إلكترونية. هذه ليست حالة طارئة، لكن من الأفضل أن يوجّهك طبيب يعرف تاريخك المرضي.',
+  age_h:'هذه الخدمة للبالغين',age_p:'هذه المذكرة مخصّصة لمن أعمارهم 18 عاماً فأكثر. أمّا الطفل أو المراهق الذي يعاني من الخفقان، فيرجى ترتيب المراجعة عبر طبيب محلي أو خدمة أطفال.',
   elig_submit:'تحقّق من أهليتي',elig_need:'يرجى إكمال جميع الأسئلة المطلوبة، بما في ذلك جميع أسئلة السلامة.',
   ns_h:'هذه الخدمة غير مناسبة لأعراضك',
   ns_p:'بناءً على إجاباتك، يجب ألا تستخدم مذكرة تخطيط القلب غير الطارئة هذه. يرجى طلب الرعاية الطبية العاجلة عبر خدمات الطوارئ المحلية أو أقرب قسم طوارئ الآن.',
   ns_emergency:'إذا شعرت أن هذه حالة طارئة، فاتصل بخدمات الطوارئ المحلية فوراً.',ns_back:'العودة للرئيسية',
   res_h:'يمكنك المتابعة',res_p:'تشير إجاباتك إلى أن هذه الحالة قد تكون مناسبة لمراجعة مذكرة تخطيط قلب غير طارئة. يمكنك المتابعة إلى الدفع ورفع تخطيطاتك.',res_continue:'المتابعة إلى الدفع',
-  payp_h:'اختر مبلغك',payp_sub:'الحد الأدنى 1 جنيه — الحد الأقصى 149 جنيهاً',payp_move:'حرّك المؤشّر أو اكتب مبلغاً',payp_selected:'المبلغ المختار',payp_or:'أو أدخل مبلغاً بالضبط',payp_continue:'المتابعة إلى الدفع الآمن',
+  payp_h:'اختر مبلغك',payp_sub:'الحد الأدنى 1 جنيه — الحد الأقصى 149 جنيهاً',payp_move:'حرّك المؤشّر أو اكتب مبلغاً',payp_selected:'المبلغ المختار',payp_or:'أو أدخل مبلغاً بالضبط',payp_continue:'المتابعة إلى الدفع الآمن',payp_local_note:'يُحصّل المبلغ بالجنيه الإسترليني. المبالغ المحلية المعروضة تقريبية.',
   payp_buying_h:'ما الذي تشتريه',payp_buying:'حلقة واحدة لمدة 7 أيام بمراجعة طبيب: حتى 20 تخطيطاً أحادي الاشتقاق وتقرير ملخص واحد موحّد.',
   payp_pay_now:'ادفع (وضع تجريبي)',payp_processing:'جارٍ معالجة الدفع الآمن…',
   payp_cap_full:'سعة المراجعة الشهرية من قِبل الطبيب ممتلئة حالياً. لأن كل تخطيط يُراجع من قِبل طبيب، تم إيقاف الرفع الجديد مؤقتاً حتى تتوفّر سعة أكبر.',
@@ -676,6 +686,9 @@ DB.episodes=DB.episodes||[]; DB.monthlyUploads=DB.monthlyUploads||0; DB.lang=DB.
 let lang=DB.lang;
 function t(k){ const v=I18N[lang][k]; return v!==undefined?v:(I18N.en[k]!==undefined?I18N.en[k]:k); }
 function gbp(n){ return '£'+n; }
+/* Approximate GBP→Gulf currency hints (indicative only; production would use a live rate). */
+const FX={AED:4.7,SAR:4.8,QAR:4.6};
+function localHint(g){ if(!isFinite(g))return ''; return '≈ '+Math.round(g*FX.AED)+' AED · '+Math.round(g*FX.SAR)+' SAR'; }
 
 const CLASS_OPTS={NORMAL_SINUS_RHYTHM:{en:'Normal sinus rhythm',ar:'نظم جيبي طبيعي'},BENIGN_ECTOPY:{en:'Benign ectopy',ar:'ضربات منتبذة حميدة'},POSSIBLE_AF:{en:'Possible AF',ar:'رجفان أذيني محتمل'},IRREGULAR_RHYTHM:{en:'Irregular rhythm',ar:'نظم غير منتظم'},TACHYCARDIA:{en:'Tachycardia',ar:'تسرّع القلب'},BRADYCARDIA:{en:'Bradycardia',ar:'بطء القلب'},NOISY_INCONCLUSIVE:{en:'Noisy / inconclusive',ar:'تشويش / غير حاسم'},HIGH_RISK_PATTERN:{en:'High-risk pattern',ar:'نمط عالي الخطورة'},OTHER:{en:'Other',ar:'أخرى'}};
 const QUAL_OPTS={GOOD:{en:'Good',ar:'جيدة'},ADEQUATE:{en:'Adequate',ar:'مقبولة'},POOR:{en:'Poor',ar:'ضعيفة'},UNINTERPRETABLE:{en:'Uninterpretable',ar:'غير قابلة للتفسير'}};
@@ -880,6 +893,7 @@ function viewLearnArticle(id){
       <article>
         <div class="edu-ico" style="width:52px;height:52px;font-size:1.6rem">${e.icon}</div>
         <h1>${c.title}</h1>
+        <div class="note warn" style="margin-bottom:18px">${lang==='ar'?'الأرقام أدناه تلخّص أبحاثاً منشورة وهي معلومات عامة، وليست تنبؤاً لأي شخص بعينه ولا نصيحة طبية شخصية.':'Figures below summarise published research and are general information — not a prediction for any individual, and not personal medical advice.'}</div>
         <div class="edu-body">${c.html}</div>
         <div class="note info" style="margin-top:26px"><b>${lang==='ar'?'جاهز لالتقاط ما يفعله قلبك؟':'Ready to capture what your heart is doing?'}</b> <button class="btn sm" style="margin-inline-start:8px" onclick="go('eligibility')">${t('cta_start')}</button></div>
         <div style="display:flex;justify-content:space-between;gap:10px;margin-top:24px;flex-wrap:wrap">
@@ -933,28 +947,34 @@ function viewFAQ(){
 function eligSteps(active){ const s=['elig_h','pay_h','up_h','rep_h']; return `<div class="steps">${s.map((k,i)=>`<div class="step ${i<active?'done':(i===active?'active':'')}"><b>${i+1}</b>${t(k)}</div>`).join('')}</div>`; }
 function viewEligibility(){
   const m=I18N[lang];
-  const sel=(id,opts)=>`<select id="${id}"><option value="">—</option>${opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  const sel=(id,opts,label)=>`<select id="${id}" aria-label="${label}"><option value="">—</option>${opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  const yn=(name,q)=>`<div class="redflag-q"><div class="q" id="${name}_q">${q}</div><div class="yn" role="radiogroup" aria-labelledby="${name}_q"><label><input type="radio" name="${name}" value="yes"> ${t('yes')}</label><label><input type="radio" name="${name}" value="no"> ${t('no')}</label></div></div>`;
   app().innerHTML=`<div class="wrap narrow">
     ${eligSteps(0)}
     <h1>${t('elig_h')}</h1><p class="muted">${t('elig_intro')}</p>
     <div class="card" style="margin-bottom:18px">
       <div class="grid cols-2">
-        <div class="field"><label class="f">${t('f_country')} *</label>${sel('e_country',COUNTRIES.map(c=>[c,cName(c)]))}</div>
-        <div class="field"><label class="f">${t('f_age')} *</label><input type="number" id="e_age" min="1" max="120"></div>
-        <div class="field"><label class="f">${t('f_sex')} *</label>${sel('e_sex',[['male',t('sex_m')],['female',t('sex_f')],['prefer_not_to_say',t('sex_n')]])}</div>
-        <div class="field"><label class="f">${t('f_symptom')} *</label>${sel('e_symptom',[['palpitations',t('sym_palp')],['irregular_heartbeat',t('sym_irr')],['wearable_alert',t('sym_alert')],['routine_check',t('sym_routine')],['other',t('sym_other')]])}</div>
-        <div class="field"><label class="f">${t('f_duration')}</label>${sel('e_duration',[['today',t('dur_today')],['days',t('dur_days')],['weeks',t('dur_weeks')],['months',t('dur_months')],['years',t('dur_years')]])}</div>
-        <div class="field"><label class="f">${t('f_freq')}</label>${sel('e_freq',[['once',t('fr_once')],['daily',t('fr_daily')],['weekly',t('fr_weekly')],['monthly',t('fr_monthly')],['intermittent',t('fr_inter')],['other',t('fr_other')]])}</div>
-        <div class="field"><label class="f">${t('f_device')}</label>${sel('e_device',[['KardiaMobile',t('dev_km')],['KardiaMobile 6L',t('dev_km6')],['Apple Watch ECG',t('dev_aw')],['Other single-lead device',t('dev_other')],['Not sure',t('dev_ns')]])}</div>
-        <div class="field"><label class="f">${t('f_known')}</label>${sel('e_known',[['yes',t('yes')],['no',t('no')]])}</div>
+        <div class="field"><label class="f" for="e_country">${t('f_country')} *</label>${sel('e_country',COUNTRIES.map(c=>[c,cName(c)]),t('f_country'))}</div>
+        <div class="field"><label class="f" for="e_age">${t('f_age')} *</label><input type="number" id="e_age" min="0" max="120" aria-label="${t('f_age')}"></div>
+        <div class="field"><label class="f" for="e_sex">${t('f_sex')} *</label>${sel('e_sex',[['male',t('sex_m')],['female',t('sex_f')],['prefer_not_to_say',t('sex_n')]],t('f_sex'))}</div>
+        <div class="field"><label class="f" for="e_symptom">${t('f_symptom')} *</label>${sel('e_symptom',[['palpitations',t('sym_palp')],['irregular_heartbeat',t('sym_irr')],['wearable_alert',t('sym_alert')],['routine_check',t('sym_routine')],['other',t('sym_other')]],t('f_symptom'))}</div>
+        <div class="field"><label class="f" for="e_duration">${t('f_duration')}</label>${sel('e_duration',[['today',t('dur_today')],['days',t('dur_days')],['weeks',t('dur_weeks')],['months',t('dur_months')],['years',t('dur_years')]],t('f_duration'))}</div>
+        <div class="field"><label class="f" for="e_freq">${t('f_freq')}</label>${sel('e_freq',[['once',t('fr_once')],['daily',t('fr_daily')],['weekly',t('fr_weekly')],['monthly',t('fr_monthly')],['intermittent',t('fr_inter')],['other',t('fr_other')]],t('f_freq'))}</div>
+        <div class="field"><label class="f" for="e_device">${t('f_device')}</label>${sel('e_device',[['KardiaMobile',t('dev_km')],['KardiaMobile 6L',t('dev_km6')],['Apple Watch ECG',t('dev_aw')],['Other single-lead device',t('dev_other')],['Not sure',t('dev_ns')]],t('f_device'))}</div>
+        <div class="field"><label class="f" for="e_known">${t('f_known')}</label>${sel('e_known',[['yes',t('yes')],['no',t('no')]],t('f_known'))}</div>
       </div>
-      <div class="field"><label class="f">${t('f_meds')}</label><input type="text" id="e_meds"></div>
-      <div class="field"><label class="f">${t('f_desc')}</label><textarea id="e_desc"></textarea></div>
+      <div class="field"><label class="f" for="e_meds">${t('f_meds')}</label><input type="text" id="e_meds"></div>
+      <div class="field"><label class="f" for="e_desc">${t('f_desc')}</label><textarea id="e_desc"></textarea></div>
     </div>
     <div class="card">
       <h3>${t('redflag_h')}</h3>
       <div class="note warn" style="margin-bottom:14px">${t('redflag_intro')}</div>
-      ${m.rf.map((q,i)=>`<div class="redflag-q"><div class="q">${i+1}. ${q}</div><div class="yn"><label><input type="radio" name="rf${i}" value="yes"> ${t('yes')}</label><label><input type="radio" name="rf${i}" value="no"> ${t('no')}</label></div></div>`).join('')}
+      ${m.rf.map((q,i)=>yn('rf'+i,(i+1)+'. '+q)).join('')}
+    </div>
+    <div class="card" style="margin-top:18px">
+      <h3>${t('excl_h')}</h3>
+      <div class="note info" style="margin-bottom:14px">${t('excl_intro')}</div>
+      ${m.excl.map((q,i)=>yn('ex'+i,q)).join('')}
     </div>
     <div id="eligErr"></div>
     <div style="margin-top:16px"><button class="btn block lg" onclick="submitEligibility()">${t('elig_submit')}</button></div>
@@ -962,20 +982,36 @@ function viewEligibility(){
 }
 function submitEligibility(){
   const v=id=>document.getElementById(id).value;
-  const required=['e_country','e_age','e_sex','e_symptom']; let ok=required.every(id=>v(id)); const rf=[];
-  for(let i=0;i<8;i++){ const r=document.querySelector(`input[name=rf${i}]:checked`); if(!r)ok=false; rf.push(r?r.value:null); }
+  const required=['e_country','e_age','e_sex','e_symptom']; let ok=required.every(id=>v(id));
+  const rf=[]; for(let i=0;i<I18N[lang].rf.length;i++){ const r=document.querySelector(`input[name=rf${i}]:checked`); if(!r)ok=false; rf.push(r?r.value:null); }
+  const ex=[]; for(let i=0;i<I18N[lang].excl.length;i++){ const r=document.querySelector(`input[name=ex${i}]:checked`); if(!r)ok=false; ex.push(r?r.value:null); }
   if(!ok){ document.getElementById('eligErr').innerHTML=`<div class="note danger" style="margin-top:12px">${t('elig_need')}</div>`; return; }
-  const anyFlag=rf.some(x=>x==='yes');
-  DB.draftElig={id:uid('elig'),country:v('e_country'),age:Number(v('e_age')),sex:v('e_sex'),main_symptom:v('e_symptom'),symptom_duration:v('e_duration'),symptom_frequency:v('e_freq'),device_used:v('e_device'),known_heart_condition:v('e_known')==='yes',current_medications:v('e_meds'),symptom_description:v('e_desc'),red_flags:rf,eligible:!anyFlag,routing_tag:anyFlag?'NOT_ELIGIBLE_EMERGENCY_ADVICE':'ELIGIBLE_DIARY',created_at:nowISO()};
+  const ageNum=Number(v('e_age'));
+  const anyFlag=rf.some(x=>x==='yes'); const anyExcl=ex.some(x=>x==='yes'); const underage=isFinite(ageNum)&&ageNum<18;
+  let tag,eligible=false;
+  if(anyFlag) tag='NOT_ELIGIBLE_EMERGENCY_ADVICE';
+  else if(underage) tag='NOT_ELIGIBLE_UNDER_18';
+  else if(anyExcl) tag='NOT_ELIGIBLE_REFER';
+  else { tag='ELIGIBLE_DIARY'; eligible=true; }
+  DB.draftElig={id:uid('elig'),country:v('e_country'),age:ageNum,sex:v('e_sex'),main_symptom:v('e_symptom'),symptom_duration:v('e_duration'),symptom_frequency:v('e_freq'),device_used:v('e_device'),known_heart_condition:v('e_known')==='yes',current_medications:v('e_meds'),symptom_description:v('e_desc'),red_flags:rf,exclusions:ex,eligible,routing_tag:tag,created_at:nowISO()};
   save();
-  if(anyFlag) go('not-suitable'); else go('payment');
+  if(eligible) go('payment'); else go('not-suitable');
 }
 function viewNotSuitable(){
-  app().innerHTML=`<div class="wrap narrow"><div class="card" style="border-color:#f1c7c4;background:#fff6f5">
-    <span class="pill danger">⚠ NOT_ELIGIBLE_EMERGENCY_ADVICE</span>
-    <h1 style="color:#7e1b16;margin-top:12px">${t('ns_h')}</h1>
-    <p>${t('ns_p')}</p>
-    <div class="note danger" style="margin:14px 0">${t('ns_emergency')}</div>
+  const tag=(DB.draftElig&&DB.draftElig.routing_tag)||'NOT_ELIGIBLE_EMERGENCY_ADVICE';
+  let h,p,extra='',pillCls='danger',cardStyle='border-color:#f1c7c4;background:#fff6f5',titleStyle='color:#7e1b16';
+  if(tag==='NOT_ELIGIBLE_UNDER_18'){
+    h=t('age_h'); p=t('age_p'); pillCls='warn'; cardStyle='border-color:#eedcbf;background:#fffaf2'; titleStyle='color:#7a3d00';
+  } else if(tag==='NOT_ELIGIBLE_REFER'){
+    h=t('refer_h'); p=t('refer_p'); pillCls='neutral'; cardStyle='border-color:#cfe4e6;background:#f1f7f6'; titleStyle='color:#0a4d59';
+  } else {
+    h=t('ns_h'); p=t('ns_p'); extra=`<div class="note danger" style="margin:14px 0">${t('ns_emergency')}</div>`;
+  }
+  app().innerHTML=`<div class="wrap narrow"><div class="card" style="${cardStyle}">
+    <span class="pill ${pillCls}">⚠ ${tag}</span>
+    <h1 style="${titleStyle};margin-top:12px">${h}</h1>
+    <p>${p}</p>
+    ${extra}
     <p class="muted" style="font-size:.9rem">${t('limitation')}</p>
     <button class="btn ghost" onclick="go('home')">${t('ns_back')}</button>
   </div></div>`;
@@ -992,9 +1028,11 @@ function viewPayment(){
       <h1 style="margin-bottom:4px">${t('payp_h')}</h1>
       <p class="muted" style="margin-bottom:18px">${t('payp_sub')}</p>
       <div id="amtDisplay" class="slider-amount empty">${t('payp_move')}</div>
-      <input type="range" id="amtRange" min="1" max="149" step="1" value="1" oninput="onSlider(this.value)" onchange="onSlider(this.value)">
+      <div id="amtLocal" class="muted center" style="font-size:.85rem;min-height:1.1em;margin-bottom:6px"></div>
+      <input type="range" id="amtRange" class="pristine" min="1" max="149" step="1" value="1" aria-label="${t('payp_h')} (£1–£149)" oninput="onSlider(this.value)" onchange="onSlider(this.value)">
       <div class="slider-ends"><span>£1</span><span>£149</span></div>
-      <div class="amount-entry"><span class="muted" style="font-size:.85rem">${t('payp_or')}</span><span>£</span><input type="number" id="amtInput" min="1" max="149" step="1" placeholder="—" oninput="onInput(this.value)"></div>
+      <div class="amount-entry"><span class="muted" style="font-size:.85rem">${t('payp_or')}</span><span>£</span><input type="number" id="amtInput" min="1" max="149" step="1" placeholder="—" aria-label="${t('payp_selected')} (£)" oninput="onInput(this.value)"></div>
+      <p class="muted center" style="font-size:.78rem;margin:10px 0 0">${t('payp_local_note')}</p>
       <div class="note info" style="margin:18px 0"><b>${t('payp_buying_h')}.</b> ${t('payp_buying')}</div>
       <div id="payErr"></div>
       <button class="btn block lg" id="payBtn" disabled onclick="startPayment()">${t('payp_continue')}</button>
@@ -1002,13 +1040,14 @@ function viewPayment(){
   </div>`;
   window._amount=null;
 }
+function touchSlider(){ const r=document.getElementById('amtRange'); if(r) r.classList.remove('pristine'); }
 function setAmount(val){
-  const n=Math.round(Number(val));
-  if(!isFinite(n)||n<CFG.MIN||n>CFG.MAX){ window._amount=null; const d=document.getElementById('amtDisplay'); d.classList.add('empty'); d.textContent=t('payp_move'); document.getElementById('payBtn').disabled=true; return; }
-  window._amount=n; const d=document.getElementById('amtDisplay'); d.classList.remove('empty'); d.textContent=`${t('payp_selected')}: £${n}`; document.getElementById('payBtn').disabled=false; document.getElementById('payErr').innerHTML='';
+  const n=Math.round(Number(val)); const d=document.getElementById('amtDisplay'); const loc=document.getElementById('amtLocal');
+  if(!isFinite(n)||n<CFG.MIN||n>CFG.MAX){ window._amount=null; d.classList.add('empty'); d.textContent=t('payp_move'); if(loc)loc.textContent=''; document.getElementById('payBtn').disabled=true; return; }
+  window._amount=n; d.classList.remove('empty'); d.textContent=`${t('payp_selected')}: £${n}`; if(loc)loc.textContent=localHint(n); document.getElementById('payBtn').disabled=false; document.getElementById('payErr').innerHTML='';
 }
-function onSlider(v){ document.getElementById('amtInput').value=v; setAmount(v); }
-function onInput(v){ if(v===''){ setAmount(null); return; } const n=Math.round(Number(v)); if(isFinite(n)&&n>=1&&n<=149) document.getElementById('amtRange').value=n; setAmount(v); }
+function onSlider(v){ touchSlider(); document.getElementById('amtInput').value=v; setAmount(v); }
+function onInput(v){ touchSlider(); if(v===''){ setAmount(null); return; } const n=Math.round(Number(v)); if(isFinite(n)&&n>=1&&n<=149) document.getElementById('amtRange').value=n; setAmount(v); }
 function startPayment(){
   const amt=window._amount;
   if(!amt||amt<CFG.MIN||amt>CFG.MAX){ document.getElementById('payErr').innerHTML=`<div class="note danger" style="margin-bottom:12px">${t('err_amount')}</div>`; return; }
@@ -1043,16 +1082,16 @@ function viewUpload(){
       <div class="cap-bar"><i style="width:${used/CFG.MAX_UPLOADS*100}%"></i></div>
     </div>
     ${capFull?`<div class="note warn" style="margin-bottom:16px">${t('payp_cap_full')}</div>`:full?`<div class="note warn" style="margin-bottom:16px">${t('up_full')}</div>`:`<div class="card" style="margin-bottom:16px">
-      <div class="upload-drop" onclick="document.getElementById('ecgFile').click()"><div style="font-size:1.7rem">⬆</div><div id="fileLabel">${t('up_drop')}</div></div>
+      <button type="button" class="upload-drop" aria-label="${t('up_drop')}" onclick="document.getElementById('ecgFile').click()"><div style="font-size:1.7rem" aria-hidden="true">⬆</div><div id="fileLabel">${t('up_drop')}</div></button>
       <input type="file" id="ecgFile" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt,.xml" onchange="onFilePick(this)">
       <div class="grid cols-2" style="margin-top:14px">
-        <div class="field"><label class="f">${t('up_recorded')}</label><input type="datetime-local" id="u_recorded"></div>
-        <div class="field"><label class="f">${t('up_present')}</label><select id="u_present"><option value="">—</option><option value="yes">${t('yes')}</option><option value="no">${t('no')}</option></select></div>
+        <div class="field"><label class="f" for="u_recorded">${t('up_recorded')}</label><input type="datetime-local" id="u_recorded" aria-label="${t('up_recorded')}"></div>
+        <div class="field"><label class="f" for="u_present">${t('up_present')}</label><select id="u_present" aria-label="${t('up_present')}"><option value="">—</option><option value="yes">${t('yes')}</option><option value="no">${t('no')}</option></select></div>
       </div>
-      <div class="field"><label class="f">${t('up_symtype')}</label><select id="u_symtype" onchange="checkUploadWarn(this.value)">
+      <div class="field"><label class="f" for="u_symtype">${t('up_symtype')}</label><select id="u_symtype" aria-label="${t('up_symtype')}" onchange="checkUploadWarn(this.value)">
         <option value="none">${t('st_none')}</option><option value="palpitations">${t('st_palp')}</option><option value="dizziness">${t('st_dizzy')}</option><option value="chest_discomfort">${t('st_chest')}</option><option value="breathlessness">${t('st_breath')}</option><option value="other">${t('st_other')}</option></select></div>
       <div id="upWarn"></div>
-      <div class="field"><label class="f">${t('up_note')}</label><input type="text" id="u_note"></div>
+      <div class="field"><label class="f" for="u_note">${t('up_note')}</label><input type="text" id="u_note" aria-label="${t('up_note')}"></div>
       <button class="btn block" id="addBtn" disabled onclick="addUpload()">${t('up_add')}</button>
     </div>`}
     <h3>${t('dash_submitted')}</h3>
@@ -1137,9 +1176,13 @@ function reportHTML(ep){
 }
 function downloadReport(epId){
   const ep=DB.episodes.find(e=>e.id===epId); if(!ep) return;
-  const w=window.open('','_blank');
-  w.document.write(`<html dir="${I18N[lang].dir}" lang="${lang}"><head><meta charset="utf-8"><title>ECG Diary Summary</title><style>body{font-family:system-ui,Arial,sans-serif;max-width:720px;margin:30px auto;padding:0 20px;color:#16282f;line-height:1.55}h3{border-bottom:2px solid #0f6f80;padding-bottom:6px}h4{margin:16px 0 4px}.kv{display:grid;grid-template-columns:180px 1fr;gap:3px 12px}.muted{color:#5e727b}.pill{background:#e6f1f2;color:#0a4d59;padding:2px 10px;border-radius:99px;font-size:13px}</style></head><body>${reportHTML(ep)}<p style="margin-top:30px;color:#999;font-size:12px">Generated by Gulf ECG Diary (demo). Use your browser's Print → Save as PDF.</p><script>window.onload=function(){setTimeout(function(){window.print()},250)}<\/script></body></html>`);
-  w.document.close();
+  const doc=`<html dir="${I18N[lang].dir}" lang="${lang}"><head><meta charset="utf-8"><title>ECG Diary Summary</title><style>body{font-family:system-ui,Arial,sans-serif;max-width:720px;margin:30px auto;padding:0 20px;color:#16282f;line-height:1.55}h3{border-bottom:2px solid #0f6f80;padding-bottom:6px}h4{margin:16px 0 4px}.kv{display:grid;grid-template-columns:180px 1fr;gap:3px 12px}.muted{color:#5e727b}.pill{background:#e6f1f2;color:#0a4d59;padding:2px 10px;border-radius:99px;font-size:13px}</style></head><body>${reportHTML(ep)}<p style="margin-top:30px;color:#999;font-size:12px">Generated by Gulf ECG Diary (demo). Use your browser's Print → Save as PDF.</p><script>window.onload=function(){setTimeout(function(){window.print()},250)}<\/script></body></html>`;
+  let w=null; try{ w=window.open('','_blank'); }catch(e){}
+  if(w&&w.document){ w.document.write(doc); w.document.close(); return; }
+  /* Pop-up blocked — fall back to downloading a printable HTML file. */
+  const blob=new Blob([doc],{type:'text/html'}); const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='ecg-diary-summary.html'; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),4000);
 }
 function shareWA(){
   const txt=lang==='ar'?'استخدمت خدمة مراجعة تخطيط القلب من قِبل طبيب لتخطيطات القلب أحادية الاشتقاق. يمكنك اختيار المبلغ من 1 إلى 149 جنيهاً إسترلينياً. الخدمة مخصصة للحالات غير الطارئة فقط.':'I used this clinician-reviewed ECG diary service for single-lead ECGs. You can choose what to pay from £1 to £149. It is for non-emergency rhythm concerns only.';
@@ -1249,10 +1292,10 @@ function seedDemo(){
 
 /* ----- Legal ----- */
 function viewLegal(kind){
-  const C=lang==='ar'?{terms:['شروط الخدمة','تحكم هذه الشروط استخدامك لخدمة Gulf ECG Diary. الخدمة تقدّم مراجعة عن بُعد لتخطيطات القلب أحادية الاشتقاق وهي ليست خدمة طوارئ.'],privacy:['سياسة الخصوصية','نتعامل مع بياناتك الصحية بسرية. لا تُتاح ملفات التخطيط للعامة وتتطلب تسجيل الدخول.'],disclaimer:['إخلاء المسؤولية الطبية',t('limitation')+' '+t('foot_disc')],refund:['سياسة الاسترداد','إذا لم تبدأ مراجعة الطبيب، يمكن طلب استرداد المبلغ. بعد بدء المراجعة السريرية أو إصدار التقرير، يكون الاسترداد تقديرياً.'],contact:['اتصل بنا','هذه نسخة تجريبية. ستُضاف تفاصيل التواصل قبل الإطلاق.']}
-    :{terms:['Terms of Service','These terms govern your use of Gulf ECG Diary. The service provides remote review of single-lead ECG recordings and is not an emergency service.'],privacy:['Privacy Policy','We handle your health data confidentially. ECG files are never publicly accessible and require login. Patient reports require authentication.'],disclaimer:['Medical Disclaimer',t('limitation')+' '+t('foot_disc')],refund:['Refund Policy','If no clinician review has started, a refund may be requested. Once clinical review has begun or a report has been issued, refunds are discretionary.'],contact:['Contact','This is a demo prototype. Contact details will be added before launch.']};
+  const C=lang==='ar'?{terms:['شروط الخدمة','تحكم هذه الشروط استخدامك لخدمة Gulf ECG Diary. الخدمة تقدّم مراجعة عن بُعد لتخطيطات القلب أحادية الاشتقاق وهي ليست خدمة طوارئ.'],privacy:['سياسة الخصوصية','في الخدمة الإنتاجية، ستُحفظ ملفات التخطيط بشكل خاص وآمن وتتطلب تسجيل الدخول للوصول إليها. أمّا هذه النسخة التجريبية فتخزّن البيانات داخل متصفحك فقط (localStorage) ولا تملك حسابات أو خوادم حقيقية.'],disclaimer:['إخلاء المسؤولية الطبية',t('limitation')+' '+t('foot_disc')],refund:['سياسة الاسترداد','إذا لم تبدأ مراجعة الطبيب، يمكن طلب استرداد المبلغ. بعد بدء المراجعة السريرية أو إصدار التقرير، يكون الاسترداد تقديرياً.'],contact:['اتصل بنا','هذه نسخة تجريبية. ستُضاف تفاصيل التواصل قبل الإطلاق.']}
+    :{terms:['Terms of Service','These terms govern your use of Gulf ECG Diary. The service provides remote review of single-lead ECG recordings and is not an emergency service.'],privacy:['Privacy Policy','In the production service, ECG files will be kept private, stored securely, and require login to access. This demo prototype stores data only in your browser (localStorage) and has no real accounts or servers.'],disclaimer:['Medical Disclaimer',t('limitation')+' '+t('foot_disc')],refund:['Refund Policy','If no clinician review has started, a refund may be requested. Once clinical review has begun or a report has been issued, refunds are discretionary.'],contact:['Contact','This is a demo prototype. Contact details will be added before launch.']};
   const [h,body]=C[kind]||C.terms;
-  app().innerHTML=`<div class="wrap narrow"><h1>${h}</h1><div class="card"><p style="margin:0">${body}</p></div><div class="note warn" style="margin-top:14px">${lang==='ar'?'يجب مراجعة الصياغة القانونية النهائية قبل الإطلاق.':'Final legal wording must be reviewed before launch.'}</div></div>`;
+  app().innerHTML=`<div class="wrap narrow"><h1>${h}</h1><div class="card"><p style="margin:0">${body}</p></div><div class="note warn" style="margin-top:14px">${lang==='ar'?'هذه نسخة تجريبية ببيانات توضيحية فقط — لا مدفوعات أو حسابات أو سجلات طبية حقيقية. يجب مراجعة الصياغة القانونية النهائية قبل الإطلاق.':'This is a demo prototype with sample data only — no real payments, accounts, or medical records. Final legal wording must be reviewed before launch.'}</div></div>`;
 }
 
 /* ----- Modal ----- */
