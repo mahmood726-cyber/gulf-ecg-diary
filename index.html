@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Gulf ECG Diary — Clinician-reviewed heart rhythm diary</title>
+<meta name="description" content="Clinician-reviewed single-lead ECG diary for palpitations and rhythm concerns. Evidence-based education and a calm, non-emergency rhythm review for the Gulf region." />
+<meta property="og:title" content="Gulf ECG Diary" />
+<meta property="og:description" content="Clinician-reviewed single-lead ECG diary for palpitations. Learn what your heart is doing, then choose what to pay — £1 to £149." />
+<meta property="og:type" content="website" />
+<style>
+  :root{
+    --bg:#f6f4ef; --surface:#ffffff; --ink:#16282f; --muted:#5e727b;
+    --line:#e6e0d4; --line2:#e3ebee;
+    --brand:#0f6f80; --brand-dk:#0a4d59; --brand-soft:#e6f1f2;
+    --sage:#3f7d5e; --sage-soft:#e6f1ea;
+    --gold:#b0873b; --gold-soft:#f6efe0;
+    --navy:#12303d;
+    --good:#1f8a5b; --good-soft:#e4f4ec; --warn:#a45a12; --warn-soft:#f8efe1;
+    --danger:#b3261e; --danger-soft:#fbe9e8;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(18,48,61,.05),0 10px 34px rgba(18,48,61,.07);
+    --shadow-sm:0 1px 2px rgba(18,48,61,.06),0 4px 14px rgba(18,48,61,.05);
+    --maxw:1120px;
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  html[dir=rtl] body{font-family:"Segoe UI","Noto Sans Arabic",Tahoma,system-ui,sans-serif}
+  a{color:var(--brand-dk);text-decoration:none}
+  a:hover{text-decoration:underline}
+  h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);margin:0 0 .5em;font-weight:600;letter-spacing:-.01em}
+  html[dir=rtl] h1,html[dir=rtl] h2,html[dir=rtl] h3,html[dir=rtl] h4{font-family:"Segoe UI","Noto Sans Arabic",Tahoma,sans-serif}
+  h1{font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.15}
+  h2{font-size:clamp(1.35rem,3.2vw,2rem);line-height:1.2}
+  h3{font-size:1.18rem}
+  p{margin:0 0 1em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  .narrow{max-width:780px;margin-inline:auto}
+  .muted{color:var(--muted)}
+  .hidden{display:none !important}
+  .lead{font-size:1.12rem;color:#37535d}
+  .center{text-align:center}
+
+  /* Header */
+  .demo-banner{background:var(--navy);color:#dbe8ec;font-size:.78rem;text-align:center;padding:6px 14px;letter-spacing:.01em}
+  .demo-banner b{color:#f0c987}
+  header.site{position:sticky;top:0;z-index:50;background:rgba(246,244,239,.86);backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;gap:14px;height:66px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:var(--serif);font-weight:600;font-size:1.12rem;color:var(--ink);cursor:pointer;letter-spacing:-.01em}
+  html[dir=rtl] .brand{font-family:"Segoe UI","Noto Sans Arabic",sans-serif}
+  .brand .mark{width:34px;height:34px;flex:0 0 auto}
+  .nav .spacer{flex:1}
+  .topnav{display:flex;align-items:center;gap:2px}
+  .navlink{font-size:.9rem;font-weight:500;color:#33505a;padding:8px 11px;border-radius:8px}
+  .navlink:hover{background:var(--brand-soft);text-decoration:none;color:var(--brand-dk)}
+  @media(max-width:920px){.topnav{display:none}}
+  .langbtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font:inherit;font-size:.84rem;cursor:pointer;color:var(--ink)}
+  .langbtn:hover{border-color:var(--brand)}
+  .menubtn{display:none;border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 11px;font-size:1.1rem;cursor:pointer}
+  @media(max-width:920px){.menubtn{display:inline-block}}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:11px;padding:12px 20px;font:inherit;font-weight:600;cursor:pointer;background:var(--brand);color:#fff;transition:.16s;box-shadow:0 1px 0 rgba(0,0,0,.04)}
+  .btn:hover{background:var(--brand-dk)}
+  .btn:disabled{background:#cbd8db;cursor:not-allowed}
+  .btn.ghost{background:#fff;color:var(--brand-dk);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--brand);background:var(--brand-soft)}
+  .btn.sm{padding:8px 13px;font-size:.86rem;border-radius:9px}
+  .btn.lg{padding:14px 26px;font-size:1.05rem}
+  .btn.block{width:100%}
+  .btn.danger{background:var(--danger)} .btn.danger:hover{filter:brightness(.93)}
+  .btn.gold{background:var(--gold)} .btn.gold:hover{filter:brightness(.94)}
+
+  .card{background:var(--surface);border:1px solid var(--line2);border-radius:var(--radius);box-shadow:var(--shadow-sm);padding:24px}
+  .grid{display:grid;gap:20px}
+  .cols-4{grid-template-columns:repeat(4,1fr)}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:900px){.cols-4{grid-template-columns:repeat(2,1fr)}.cols-3,.cols-2{grid-template-columns:1fr}}
+  @media(max-width:560px){.cols-4{grid-template-columns:1fr}}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:600;padding:4px 11px;border-radius:999px;background:var(--brand-soft);color:var(--brand-dk)}
+  .pill.good{background:var(--good-soft);color:var(--good)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
+  .pill.danger{background:var(--danger-soft);color:var(--danger)} .pill.neutral{background:#eef2f3;color:var(--muted)}
+  .pill.gold{background:var(--gold-soft);color:var(--gold)}
+  .kicker{text-transform:uppercase;letter-spacing:.13em;font-size:.72rem;font-weight:700;color:var(--brand)}
+  .note{border-radius:12px;padding:15px 17px;font-size:.94rem;border:1px solid var(--line2);background:#fff}
+  .note.info{background:var(--brand-soft);border-color:#cfe4e6;color:var(--brand-dk)}
+  .note.good{background:var(--good-soft);border-color:#cdeada;color:#15603f}
+  .note.warn{background:var(--warn-soft);border-color:#eedcbf;color:#7a3d00}
+  .note.danger{background:var(--danger-soft);border-color:#f1c7c4;color:#7e1b16}
+
+  /* Hero */
+  .hero{position:relative;background:
+      radial-gradient(1100px 380px at 78% -8%,rgba(15,111,128,.10),transparent 60%),
+      linear-gradient(180deg,#eef4f3 0%,var(--bg) 70%);
+      border-bottom:1px solid var(--line)}
+  .hero .wrap{padding-top:54px;padding-bottom:56px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  @media(max-width:880px){.hero .wrap{grid-template-columns:1fr;padding-top:36px;padding-bottom:36px}}
+  .hero h1{margin-bottom:.35em}
+  .hero .sub{font-size:1.18rem;color:#33535d;max-width:34ch;font-family:var(--serif);font-style:italic}
+  html[dir=rtl] .hero .sub{font-family:inherit;font-style:normal}
+  .hero-card{background:#fff;border:1px solid var(--line2);border-radius:20px;box-shadow:var(--shadow);padding:22px;position:relative;overflow:hidden}
+  .ecg-strip{width:100%;height:90px;display:block}
+  .price-tag{font-family:var(--serif);font-size:2rem;font-weight:600;color:var(--brand-dk)}
+  .trust-row{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin-top:22px;font-size:.86rem;color:var(--muted)}
+  .trust-row span{display:inline-flex;align-items:center;gap:6px}
+
+  /* section band */
+  .band{padding:54px 0;border-bottom:1px solid var(--line)}
+  .band.alt{background:#fff}
+  .band.tint{background:linear-gradient(180deg,#eef4f3,#f6f4ef)}
+  .section-head{max-width:640px;margin-bottom:30px}
+  .section-head .kicker{display:block;margin-bottom:8px}
+
+  /* stat / evidence */
+  .stat-num{font-family:var(--serif);font-size:2.3rem;font-weight:600;color:var(--brand-dk);line-height:1}
+  .evidence{border-inline-start:3px solid var(--gold);background:var(--gold-soft);border-radius:0 12px 12px 0;padding:13px 16px;font-size:.9rem;color:#6a531f;margin:14px 0}
+  html[dir=rtl] .evidence{border-radius:12px 0 0 12px}
+  .evidence b{color:#5a4719}
+
+  /* steps / journey */
+  .steps{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+  .step{flex:1;min-width:130px;border:1px solid var(--line2);border-radius:12px;padding:11px 13px;font-size:.82rem;background:#fff;color:var(--muted)}
+  .step b{display:block;color:var(--ink);font-size:.92rem;margin-bottom:2px}
+  .step.active{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-dk)}
+  .step.done{border-color:#cdeada;background:var(--good-soft)}
+  .journey{position:relative;display:grid;gap:18px}
+  .jrow{display:grid;grid-template-columns:54px 1fr;gap:16px;align-items:flex-start}
+  .jdot{width:54px;height:54px;border-radius:50%;background:var(--brand-soft);color:var(--brand-dk);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:1.1rem;border:1px solid #cfe4e6;flex:0 0 auto}
+
+  /* forms */
+  label.f{display:block;font-weight:600;font-size:.9rem;margin:0 0 6px}
+  .field{margin-bottom:16px}
+  input[type=text],input[type=number],input[type=email],input[type=date],input[type=datetime-local],select,textarea{
+    width:100%;padding:11px 13px;border:1px solid var(--line2);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+  textarea{min-height:84px;resize:vertical}
+  input:focus,select:focus,textarea:focus{outline:3px solid var(--brand-soft);border-color:var(--brand)}
+  .yn{display:flex;gap:10px;flex-wrap:wrap}
+  .yn label{flex:1;min-width:110px;border:1px solid var(--line2);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.9rem;background:#fff}
+  .yn input{accent-color:var(--brand)}
+  .yn label:has(input:checked){border-color:var(--brand);background:var(--brand-soft)}
+  .redflag-q{border:1px solid var(--line2);border-radius:11px;padding:13px 15px;margin-bottom:10px;background:#fff}
+  .redflag-q .q{font-weight:600;font-size:.92rem;margin-bottom:8px}
+
+  /* slider */
+  .slider-amount{font-family:var(--serif);font-size:2.6rem;font-weight:600;color:var(--brand-dk);text-align:center;min-height:1.2em}
+  .slider-amount.empty{color:#bcccce;font-size:1.25rem;font-family:var(--sans)}
+  input[type=range]{width:100%;accent-color:var(--brand);height:32px}
+  .slider-ends{display:flex;justify-content:space-between;font-size:.82rem;color:var(--muted);margin-top:2px}
+  .amount-entry{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:10px}
+  .amount-entry input{width:120px;text-align:center}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th,td{text-align:start;padding:11px 13px;border-bottom:1px solid var(--line2)}
+  th{font-size:.74rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  tr:hover td{background:#fafcfb}
+  .table-wrap{overflow:auto;border:1px solid var(--line2);border-radius:13px;background:#fff}
+  html[dir=rtl] th,html[dir=rtl] td{text-align:right}
+
+  .cap-bar{height:9px;border-radius:99px;background:#eef2f3;overflow:hidden;margin-top:8px}
+  .cap-bar>i{display:block;height:100%;background:var(--brand)}
+  .stat .v{font-family:var(--serif);font-size:1.7rem;font-weight:600;color:var(--ink);line-height:1.1}
+  .stat .l{font-size:.82rem;color:var(--muted);margin-top:4px}
+
+  /* footer */
+  footer.site{background:var(--navy);color:#bfd2d8;padding:46px 0 30px}
+  footer.site a{color:#a9d0d6} footer.site a:hover{color:#fff}
+  footer .cols{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:28px}
+  @media(max-width:760px){footer .cols{grid-template-columns:1fr}}
+  footer h4{color:#fff;font-size:.95rem}
+  footer ul{list-style:none;padding:0;margin:0;font-size:.9rem;line-height:2}
+  footer .disc{font-size:.8rem;color:#8fa9b1;margin-top:24px;border-top:1px solid #234653;padding-top:16px}
+
+  /* accordion / misc */
+  .accordion{border:1px solid var(--line2);border-radius:12px;margin-bottom:10px;background:#fff;overflow:hidden}
+  .accordion>button{width:100%;text-align:start;padding:15px 17px;font-family:var(--serif);font-weight:600;font-size:1.02rem;background:#fff;border:0;cursor:pointer;display:flex;justify-content:space-between;gap:10px;color:var(--ink)}
+  html[dir=rtl] .accordion>button{font-family:inherit}
+  .accordion>div{padding:0 17px 16px;color:#455c64;font-size:.94rem}
+  .modal-bg{position:fixed;inset:0;background:rgba(18,48,61,.5);display:flex;align-items:center;justify-content:center;z-index:90;padding:18px}
+  .modal{background:#fff;border-radius:16px;max-width:540px;width:100%;padding:26px;box-shadow:var(--shadow);max-height:90vh;overflow:auto}
+  .upload-drop{border:2px dashed var(--line2);border-radius:13px;padding:28px;text-align:center;background:#fafcfb;cursor:pointer}
+  .upload-drop:hover{border-color:var(--brand);background:var(--brand-soft)}
+  .list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line2);font-size:.9rem}
+  .list-row:last-child{border-bottom:0}
+  .badge-file{width:36px;height:36px;border-radius:9px;background:var(--brand-soft);color:var(--brand-dk);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex:0 0 auto}
+  ul.clean{padding-inline-start:20px;margin:0 0 1em}
+  ul.clean li{margin-bottom:7px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .seg{display:inline-flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden;background:#fff}
+  .seg button{border:0;background:#fff;padding:8px 13px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--muted)}
+  .seg button.on{background:var(--brand);color:#fff}
+  .report-doc{background:#fff;border:1px solid var(--line2);border-radius:13px;padding:28px}
+  .report-doc h3{border-bottom:2px solid var(--brand);padding-bottom:7px}
+  .report-doc h4{margin:18px 0 4px;font-size:1rem}
+  .kv{display:grid;grid-template-columns:170px 1fr;gap:4px 16px;font-size:.92rem}
+  @media(max-width:560px){.kv{grid-template-columns:1fr}}
+
+  /* education */
+  .edu-card{display:block;background:#fff;border:1px solid var(--line2);border-radius:14px;padding:20px;box-shadow:var(--shadow-sm);transition:.16s;cursor:pointer;height:100%}
+  .edu-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);text-decoration:none;border-color:#cfe4e6}
+  .edu-ico{width:42px;height:42px;border-radius:11px;background:var(--brand-soft);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:12px}
+  .edu-card h3{margin-bottom:4px;font-size:1.08rem}
+  .edu-card p{margin:0;font-size:.9rem;color:var(--muted)}
+  .edu-body{font-size:1.02rem;color:#314a52}
+  .edu-body h2{margin-top:36px}
+  .edu-body h3{margin-top:24px;font-size:1.15rem}
+  .anchor-nav{position:sticky;top:78px;align-self:start;font-size:.88rem;display:grid;gap:3px}
+  .anchor-nav a{padding:6px 10px;border-radius:8px;color:#4a626a}
+  .anchor-nav a:hover{background:var(--brand-soft);text-decoration:none;color:var(--brand-dk)}
+  @media(max-width:880px){.anchor-nav{position:static;display:none}}
+  .edu-layout{display:grid;grid-template-columns:230px 1fr;gap:34px}
+  @media(max-width:880px){.edu-layout{grid-template-columns:1fr}}
+  .breath-ring{width:170px;height:170px;border-radius:50%;margin:10px auto;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle,var(--brand-soft),#fff);border:2px solid var(--brand);color:var(--brand-dk);font-family:var(--serif);font-size:1.1rem;text-align:center;
+    animation:breathe 10s ease-in-out infinite}
+  @keyframes breathe{0%,100%{transform:scale(.78)}40%{transform:scale(1)}60%{transform:scale(1)}}
+</style>
+</head>
+<body>
+<div class="demo-banner" id="demoBanner"></div>
+<header class="site">
+  <div class="wrap nav">
+    <div class="brand" onclick="go('home')" title="Home">
+      <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect width="40" height="40" rx="11" fill="#0f6f80"/>
+        <path d="M5 21h6.5l2-9 4 16 3-12 2 6H34" stroke="#fff" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" fill="none"/>
+      </svg>
+      <span>Gulf ECG Diary</span>
+    </div>
+    <div class="spacer"></div>
+    <nav id="topnav" class="topnav"></nav>
+    <button class="langbtn" id="langToggle" onclick="toggleLang()"></button>
+    <button class="menubtn" onclick="toggleMobileNav()">☰</button>
+  </div>
+  <div id="mobileNav" class="hidden" style="border-top:1px solid var(--line);background:#fff;padding:8px 0"></div>
+</header>
+
+<main id="app"></main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <div class="brand" style="color:#fff;margin-bottom:12px">
+          <svg class="mark" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="11" fill="#15788a"/><path d="M5 21h6.5l2-9 4 16 3-12 2 6H34" stroke="#fff" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round" fill="none"/></svg>
+          <span>Gulf ECG Diary</span>
+        </div>
+        <p style="color:#9fc0c7;font-size:.9rem;max-width:42ch" id="footTag"></p>
+        <span class="pill warn" id="footNotEmergency" style="background:#3a2a12;color:#f0c987"></span>
+      </div>
+      <div>
+        <h4 id="footLegalH"></h4>
+        <ul id="footLegalLinks"></ul>
+      </div>
+      <div>
+        <h4 id="footMoreH"></h4>
+        <ul id="footMoreLinks"></ul>
+      </div>
+    </div>
+    <div class="disc" id="footDisc"></div>
+  </div>
+</footer>
+
+<div id="modalRoot"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   GULF ECG DIARY — static GitHub Pages prototype
+   Design & educational content adapted from the owner's
+   OpenPalp / London Cardiology Clinic programme.
+   No real payments, no real PHI. State lives in this browser.
+   ============================================================ */
+
+const CFG={MIN:1,MAX:149,MAX_UPLOADS:20,DIARY_DAYS:7,MONTHLY_CAP:1000};
+
+/* ---------- Education content (bilingual) ---------- */
+/* Adapted from the owner's own OpenPalp material; UK-specific terms
+   (999 / NHS) replaced with Gulf-appropriate wording per spec. */
+const EDU=[
+ {id:'understanding',icon:'🫀',
+  en:{teaser:'Why your heart skips, flutters or races — and why it is usually harmless.',title:'Understanding palpitations',
+  html:`<p class="lead">The sensation of your heart skipping a beat, fluttering in your chest, or suddenly racing can be alarming — but in the majority of people with no underlying heart disease, palpitations are a benign nuisance rather than a warning sign.</p>
+  <p>Most people find that their palpitations come and go unpredictably, and that uncertainty is itself distressing. The aim of an ECG diary is simple: to capture what your heart is actually doing at the moment you feel it, so that uncertainty can be replaced with understanding.</p>
+  <div class="note good"><b>You are not alone.</b> Palpitations are one of the most common reasons people see a cardiologist. Many palpitations are distressing but not dangerous.</div>`},
+  ar:{teaser:'لماذا يرفرف قلبك أو يتسارع — ولماذا يكون غالباً غير ضار.',title:'فهم الخفقان',
+  html:`<p class="lead">قد يكون الإحساس بأن قلبك يفوّت نبضة أو يرفرف في صدرك أو يتسارع فجأة مقلقاً — لكن لدى غالبية الأشخاص الذين لا يعانون من مرض قلبي كامن، يكون الخفقان إزعاجاً حميداً وليس علامة تحذير.</p>
+  <p>يجد معظم الناس أن الخفقان يأتي ويذهب بشكل غير متوقّع، وهذا الغموض بحد ذاته مزعج. هدف مذكرة تخطيط القلب بسيط: التقاط ما يفعله قلبك فعلاً في اللحظة التي تشعر بها، لكي يحل الفهم محل الغموض.</p>
+  <div class="note good"><b>لست وحدك.</b> الخفقان من أكثر الأسباب شيوعاً لزيارة طبيب القلب. كثير من حالات الخفقان مزعجة لكنها ليست خطيرة.</div>`}},
+
+ {id:'triggers',icon:'☕',
+  en:{teaser:'The everyday things that set palpitations off.',title:'Common triggers',
+  html:`<p>Palpitations rarely come from nowhere. The most common everyday triggers are simple and often within your control:</p>
+  <div class="grid cols-3">
+    ${['Caffeine','Poor sleep','Stress and anxiety','Alcohol','Dehydration','Hormonal changes'].map(x=>`<div class="card" style="padding:16px;text-align:center"><b>${x}</b></div>`).join('')}
+  </div>
+  <p style="margin-top:16px">A diary helps you connect what you felt with what you were doing — turning a vague worry into a pattern you can act on.</p>`},
+  ar:{teaser:'الأشياء اليومية التي تثير الخفقان.',title:'المحفّزات الشائعة',
+  html:`<p>نادراً ما يأتي الخفقان من العدم. أكثر المحفّزات اليومية شيوعاً بسيطة وغالباً ضمن سيطرتك:</p>
+  <div class="grid cols-3">
+    ${['الكافيين','قلة النوم','التوتر والقلق','الكحول','الجفاف','التغيّرات الهرمونية'].map(x=>`<div class="card" style="padding:16px;text-align:center"><b>${x}</b></div>`).join('')}
+  </div>
+  <p style="margin-top:16px">تساعدك المذكرة على ربط ما شعرت به بما كنت تفعله — لتحويل قلق غامض إلى نمط يمكنك التعامل معه.</p>`}},
+
+ {id:'attention-loop',icon:'🔁',
+  en:{teaser:'The more you watch your heartbeat, the more you find.',title:'The attention loop',
+  html:`<p class="lead">The more you monitor your heartbeat, the more you find it — until you learn not to look.</p>
+  <p>Many people fall into a self-reinforcing cycle. Understanding the loop is the first step to breaking it:</p>
+  ${loopDiagram('en')}
+  <p style="margin-top:14px">Capturing a few clear ECG traces — and being told what they actually show — gives the reassurance that quietens the loop, so attention can return to normal life.</p>`},
+  ar:{teaser:'كلما راقبت نبض قلبك أكثر، وجدته أكثر.',title:'حلقة الانتباه',
+  html:`<p class="lead">كلما راقبت نبض قلبك أكثر، وجدته أكثر — إلى أن تتعلّم ألا تنظر.</p>
+  <p>يقع كثير من الناس في دورة تغذّي نفسها. فهم الحلقة هو الخطوة الأولى لكسرها:</p>
+  ${loopDiagram('ar')}
+  <p style="margin-top:14px">التقاط بضع تخطيطات واضحة — ومعرفة ما تظهره فعلاً — يمنح الطمأنينة التي تهدّئ الحلقة، فيعود الانتباه إلى الحياة الطبيعية.</p>`}},
+
+ {id:'breathing',icon:'🌬️',
+  en:{teaser:'Five minutes, twice a day. Your rhythm can shift within one session.',title:'The 4–6 breathing technique',
+  html:`<p>Slow breathing is one of the simplest evidence-based tools for a calmer heart rhythm. The pattern is easy to remember:</p>
+  ${breathBlock('en')}
+  <ul class="clean"><li><b>Breathe in for 4 seconds.</b></li><li><b>Breathe out for 6 seconds.</b></li><li>Repeat five times. Do this for about five minutes, twice a day.</li></ul>
+  <p>The longer out-breath gently activates your vagus nerve, the body's natural "brake" on heart rate.</p>
+  <div class="evidence"><b>What the evidence shows:</b> across breathing studies, heart-rate variability improved — not after weeks of practice, but within the same session, within minutes.</div>`},
+  ar:{teaser:'خمس دقائق مرتين يومياً. قد يتغيّر نظمك خلال جلسة واحدة.',title:'تقنية التنفّس 4–6',
+  html:`<p>التنفّس البطيء من أبسط الأدوات المبنية على الأدلة لنظم قلب أهدأ. النمط سهل التذكّر:</p>
+  ${breathBlock('ar')}
+  <ul class="clean"><li><b>شهيق لمدة 4 ثوانٍ.</b></li><li><b>زفير لمدة 6 ثوانٍ.</b></li><li>كرّر خمس مرات. افعل ذلك نحو خمس دقائق، مرتين يومياً.</li></ul>
+  <p>الزفير الأطول ينشّط العصب المبهم بلطف، وهو "مكبح" الجسم الطبيعي لمعدّل ضربات القلب.</p>
+  <div class="evidence"><b>ما تظهره الأدلة:</b> عبر دراسات التنفّس، تحسّن تغيّر معدّل ضربات القلب — ليس بعد أسابيع من التمرين، بل خلال الجلسة نفسها وفي دقائق.</div>`}},
+
+ {id:'when-it-happens',icon:'🆘',
+  en:{teaser:'A calm, ordered response for the moment it strikes.',title:'When you feel palpitations',
+  html:`<div class="note danger"><b>Safety first.</b> If you feel faint, develop chest pain, or have a sustained fast heart rate that does not settle after 15–20 minutes, stop and contact your local emergency services or nearest emergency department immediately.</div>
+  <div class="journey" style="margin-top:18px">
+    ${stepRow('1','Stay calm','Anxiety amplifies palpitations. Take one slow breath and remind yourself: most palpitations are not dangerous. You are not in danger.')}
+    ${stepRow('2','Sit or lie down','Reduce demand on your heart. Do not continue strenuous activity until the episode has fully passed.')}
+    ${stepRow('3','Breathe slowly','4 seconds in, 6 seconds out. Repeat five times. This activates your vagus nerve and can help settle the heart.')}
+    ${stepRow('4','Try a vagal technique','If you feel safe to do so: bear down gently as if straining (Valsalva), or splash cold water on your face — only if you feel well enough.')}
+    ${stepRow('5','Record your ECG','As quickly as possible. Even if symptoms are settling, record anyway — a trace during or just after an episode is highly informative.')}
+    ${stepRow('6','Note it in your diary','Time, duration, severity, what you were doing, what helped. The pattern across your diary is where the answers live.')}
+  </div>`},
+  ar:{teaser:'استجابة هادئة ومرتّبة للحظة حدوثه.',title:'عندما تشعر بالخفقان',
+  html:`<div class="note danger"><b>السلامة أولاً.</b> إذا شعرت بدوار أو ظهر لديك ألم في الصدر أو استمر تسارع ضربات القلب دون أن يهدأ بعد 15–20 دقيقة، توقّف واتصل بخدمات الطوارئ المحلية أو أقرب قسم طوارئ فوراً.</div>
+  <div class="journey" style="margin-top:18px">
+    ${stepRow('1','ابقَ هادئاً','القلق يضخّم الخفقان. خذ نفساً بطيئاً وذكّر نفسك: معظم حالات الخفقان ليست خطيرة. أنت لست في خطر.')}
+    ${stepRow('2','اجلس أو استلقِ','قلّل الجهد على قلبك. لا تواصل النشاط الشاق حتى تمرّ النوبة تماماً.')}
+    ${stepRow('3','تنفّس ببطء','شهيق 4 ثوانٍ، زفير 6 ثوانٍ. كرّر خمس مرات. هذا ينشّط العصب المبهم وقد يساعد على تهدئة القلب.')}
+    ${stepRow('4','جرّب تقنية مبهمية','إن شعرت بالأمان: اضغط بلطف كأنك تجهد (مناورة فالسالفا)، أو رشّ ماءً بارداً على وجهك — فقط إن كنت بخير بما يكفي.')}
+    ${stepRow('5','سجّل تخطيطك','بأسرع ما يمكن. حتى لو كانت الأعراض تهدأ، سجّل على أي حال — فالتخطيط أثناء النوبة أو بعدها مباشرة مفيد جداً.')}
+    ${stepRow('6','دوّنه في مذكرتك','الوقت والمدة والشدة وما كنت تفعله وما الذي ساعد. النمط عبر مذكرتك هو حيث تكمن الإجابات.')}
+  </div>`}},
+
+ {id:'vagal',icon:'🧊',
+  en:{teaser:'Simple manoeuvres that can settle a fast rhythm — used safely.',title:'Vagal techniques, used safely',
+  html:`<p>Vagal manoeuvres can sometimes settle a fast regular rhythm. They are simple, but they are not for everyone.</p>
+  <ul class="clean"><li><b>Valsalva:</b> bear down gently as if straining, for about 15 seconds.</li><li><b>Cold stimulus:</b> splash cold water on your face.</li></ul>
+  <div class="note warn"><b>Use them safely.</b> Always sit or lie down first. They are not suitable if you have known eye disease or significant heart-valve problems. Do not press on your neck (carotid massage). If symptoms worsen during any technique, stop immediately. If you feel very unwell or develop chest pain, do not attempt them — contact your local emergency services.</div>`},
+  ar:{teaser:'مناورات بسيطة قد تهدّئ النظم السريع — بأمان.',title:'التقنيات المبهمية بأمان',
+  html:`<p>قد تساعد المناورات المبهمية أحياناً على تهدئة نظم سريع منتظم. وهي بسيطة لكنها ليست مناسبة للجميع.</p>
+  <ul class="clean"><li><b>فالسالفا:</b> اضغط بلطف كأنك تجهد، لنحو 15 ثانية.</li><li><b>منبّه بارد:</b> رشّ ماءً بارداً على وجهك.</li></ul>
+  <div class="note warn"><b>استخدمها بأمان.</b> اجلس أو استلقِ أولاً دائماً. ليست مناسبة إن كان لديك مرض في العين أو مشاكل كبيرة في صمامات القلب. لا تضغط على رقبتك (تدليك السباتي). إذا ساءت الأعراض أثناء أي تقنية، توقّف فوراً. إذا شعرت بتوعّك شديد أو ألم في الصدر، فلا تحاولها — واتصل بخدمات الطوارئ المحلية.</div>`}},
+
+ {id:'sleep',icon:'😴',
+  en:{teaser:'Disrupted sleep and heart rhythm are deeply connected.',title:'Sleep & your heart rhythm',
+  html:`<p class="lead">Your sleep is not separate from your heart rhythm. It is part of it.</p>
+  <p>The same heart, on a different night's sleep, can behave very differently. Disrupted sleep increases extra beats; protected, restorative sleep reduces them.</p>
+  <div class="grid cols-2">
+    <div class="card center"><div class="stat-num">+33%</div><p class="muted" style="margin:6px 0 0">more extra beats (PVCs) after disrupted sleep</p></div>
+    <div class="card center"><div class="stat-num">−29%</div><p class="muted" style="margin:6px 0 0">lower risk of atrial fibrillation with healthy sleep patterns</p></div>
+  </div>
+  <div class="evidence"><b>Evidence:</b> a 2021 study in <i>JACC</i> followed 403,187 UK Biobank participants and found a 29% lower risk of atrial fibrillation in those with healthy sleep patterns.</div>`},
+  ar:{teaser:'النوم المضطرب ونظم القلب مرتبطان بعمق.',title:'النوم ونظم قلبك',
+  html:`<p class="lead">نومك ليس منفصلاً عن نظم قلبك. بل هو جزء منه.</p>
+  <p>القلب نفسه، بعد ليلة نوم مختلفة، قد يتصرّف بشكل مختلف تماماً. النوم المضطرب يزيد الضربات الزائدة؛ والنوم المريح يقلّلها.</p>
+  <div class="grid cols-2">
+    <div class="card center"><div class="stat-num">+33%</div><p class="muted" style="margin:6px 0 0">ضربات زائدة أكثر بعد النوم المضطرب</p></div>
+    <div class="card center"><div class="stat-num">−29%</div><p class="muted" style="margin:6px 0 0">خطر أقل للرجفان الأذيني مع أنماط نوم صحية</p></div>
+  </div>
+  <div class="evidence"><b>الأدلة:</b> تابعت دراسة عام 2021 في مجلة <i>JACC</i> عدد 403,187 مشاركاً من UK Biobank ووجدت انخفاضاً بنسبة 29% في خطر الرجفان الأذيني لدى أصحاب أنماط النوم الصحية.</div>`}},
+
+ {id:'alcohol',icon:'🍷',
+  en:{teaser:'Cutting back has a measurable effect on rhythm.',title:'Alcohol & atrial fibrillation',
+  html:`<p>Alcohol is one of the best-studied lifestyle triggers for atrial fibrillation — and one of the most modifiable.</p>
+  <div class="card center"><div class="stat-num">−45%</div><p class="muted" style="margin:6px 0 0">AF recurrence in people who stopped drinking</p></div>
+  <div class="evidence"><b>Evidence:</b> in the first randomised trial of alcohol abstinence for AF, patients who stopped drinking reduced their AF recurrence by 45%. Even moderate regular drinking (10+ drinks per week) has measurable cardiac effects.</div>`},
+  ar:{teaser:'التقليل له أثر ملموس على النظم.',title:'الكحول والرجفان الأذيني',
+  html:`<p>الكحول من أكثر محفّزات نمط الحياة دراسةً للرجفان الأذيني — ومن أكثرها قابلية للتعديل.</p>
+  <div class="card center"><div class="stat-num">−45%</div><p class="muted" style="margin:6px 0 0">تكرار الرجفان لدى من توقّفوا عن الشرب</p></div>
+  <div class="evidence"><b>الأدلة:</b> في أول تجربة عشوائية للامتناع عن الكحول في الرجفان الأذيني، خفّض المرضى الذين توقّفوا عن الشرب تكرار الرجفان بنسبة 45%. وحتى الشرب المعتدل المنتظم (10 مشروبات أو أكثر أسبوعياً) له آثار قلبية ملموسة.</div>`}},
+
+ {id:'weight-movement',icon:'🏃',
+  en:{teaser:'A heart that moves less, fires irregularly more.',title:'Weight, movement & rhythm',
+  html:`<p class="lead">The heart that moves less, fires irregularly more.</p>
+  <p>Body weight and regular movement both shape how stable your rhythm is.</p>
+  <div class="grid cols-2">
+    <div class="card center"><div class="stat-num">+33%</div><p class="muted" style="margin:6px 0 0">more likely to have extra ventricular beats with obesity (and +4% per BMI unit)</p></div>
+    <div class="card center"><div class="stat-num">−30%</div><p class="muted" style="margin:6px 0 0">AF recurrence with exercise-based cardiac rehabilitation</p></div>
+  </div>
+  <div class="evidence"><b>Evidence:</b> a Cochrane systematic review found exercise-based cardiac rehabilitation reduces AF recurrence by about 30%.</div>`},
+  ar:{teaser:'القلب الذي يتحرّك أقل، ينبض بعدم انتظام أكثر.',title:'الوزن والحركة والنظم',
+  html:`<p class="lead">القلب الذي يتحرّك أقل، ينبض بعدم انتظام أكثر.</p>
+  <p>كلٌّ من وزن الجسم والحركة المنتظمة يشكّلان مدى استقرار نظمك.</p>
+  <div class="grid cols-2">
+    <div class="card center"><div class="stat-num">+33%</div><p class="muted" style="margin:6px 0 0">احتمال أكبر للضربات البطينية الزائدة مع السمنة (و+4% لكل وحدة من مؤشّر كتلة الجسم)</p></div>
+    <div class="card center"><div class="stat-num">−30%</div><p class="muted" style="margin:6px 0 0">تكرار الرجفان مع إعادة التأهيل القلبي القائم على التمرين</p></div>
+  </div>
+  <div class="evidence"><b>الأدلة:</b> وجدت مراجعة منهجية من Cochrane أن إعادة التأهيل القلبي القائم على التمرين تقلّل تكرار الرجفان بنحو 30%.</div>`}},
+
+ {id:'omega3',icon:'💊',
+  en:{teaser:'A common supplement that may work against your rhythm.',title:'Omega-3 supplements: a caution',
+  html:`<div class="note warn"><b>Worth knowing:</b> high-dose omega-3 fish-oil <i>supplements</i> have been linked to a higher risk of atrial fibrillation.</div>
+  <div class="grid cols-2" style="margin-top:14px">
+    <div class="card center"><div class="stat-num">+25%</div><p class="muted" style="margin:6px 0 0">higher AF risk with omega-3 supplements</p></div>
+    <div class="card center"><div class="stat-num">+49%</div><p class="muted" style="margin:6px 0 0">at doses above 1 g per day</p></div>
+  </div>
+  <p style="margin-top:14px">If you take omega-3 supplements for your heart, the evidence suggests they may be working against your rhythm, not for it. <b>Eating fish as part of your diet does not carry this risk.</b> Always discuss supplements with your own doctor before changing anything.</p>`},
+  ar:{teaser:'مكمّل شائع قد يعمل ضد نظمك.',title:'مكمّلات أوميغا-3: تنبيه',
+  html:`<div class="note warn"><b>من المفيد معرفته:</b> ارتبطت <i>مكمّلات</i> زيت السمك أوميغا-3 بجرعات عالية بخطر أعلى للرجفان الأذيني.</div>
+  <div class="grid cols-2" style="margin-top:14px">
+    <div class="card center"><div class="stat-num">+25%</div><p class="muted" style="margin:6px 0 0">خطر رجفان أعلى مع مكمّلات أوميغا-3</p></div>
+    <div class="card center"><div class="stat-num">+49%</div><p class="muted" style="margin:6px 0 0">عند جرعات أكثر من 1 غرام يومياً</p></div>
+  </div>
+  <p style="margin-top:14px">إذا كنت تتناول مكمّلات أوميغا-3 من أجل قلبك، فالأدلة تشير إلى أنها قد تعمل ضد نظمك لا لصالحه. <b>أمّا تناول السمك ضمن نظامك الغذائي فلا يحمل هذا الخطر.</b> ناقش دائماً المكمّلات مع طبيبك قبل تغيير أي شيء.</p>`}},
+
+ {id:'device',icon:'📱',
+  en:{teaser:'Your heart’s voice recorder — how single-lead ECG works.',title:'Your single-lead ECG device',
+  html:`<p>A single-lead ECG device — such as a KardiaMobile or an Apple Watch ECG — records a single-lead ECG in about 30 seconds. You use it whenever you feel symptoms, and once each morning at rest.</p>
+  <p class="lead">Think of it as your heart's voice recorder — activated by you, at the moment that matters.</p>
+  <h3>How to record a good trace</h3>
+  <ul class="clean"><li>Rest your hands and follow your device's prompt (for a handheld, place each thumb on an electrode pad).</li><li>Hold still, breathe gently, and stay for the full 30 seconds.</li><li>The app saves and analyses the recording automatically.</li></ul>
+  <div class="note info"><b>"Unclassified" is not failure.</b> It simply means the app's automatic reader could not classify the trace. A clinician can still review the raw recording directly — which is exactly what this service does. If the app shows "Possible Atrial Fibrillation" or another flagged result, do not panic: record it, note the time, and upload it.</div>
+  <p class="muted" style="font-size:.86rem;margin-top:14px">Gulf ECG Diary is an independent service and is not endorsed by or affiliated with any device maker.</p>`},
+  ar:{teaser:'مسجّل صوت قلبك — كيف يعمل التخطيط أحادي الاشتقاق.',title:'جهاز تخطيط القلب أحادي الاشتقاق',
+  html:`<p>جهاز تخطيط أحادي الاشتقاق — مثل KardiaMobile أو تخطيط Apple Watch — يسجّل تخطيطاً أحادي الاشتقاق في نحو 30 ثانية. تستخدمه كلما شعرت بأعراض، ومرة كل صباح أثناء الراحة.</p>
+  <p class="lead">اعتبره مسجّل صوت قلبك — تفعّله أنت في اللحظة المهمة.</p>
+  <h3>كيف تسجّل تخطيطاً جيداً</h3>
+  <ul class="clean"><li>أرِح يديك واتبع إرشاد جهازك (في الجهاز المحمول، ضع كل إبهام على لوح قطب).</li><li>ابقَ ثابتاً، وتنفّس بهدوء، وابقَ طوال الـ30 ثانية كاملة.</li><li>يحفظ التطبيق التسجيل ويحلّله تلقائياً.</li></ul>
+  <div class="note info"><b>"غير مصنّف" ليس فشلاً.</b> يعني فقط أن القارئ الآلي للتطبيق لم يستطع تصنيف التخطيط. ويمكن للطبيب مع ذلك مراجعة التسجيل الخام مباشرة — وهو بالضبط ما تقدّمه هذه الخدمة. إذا أظهر التطبيق "رجفان أذيني محتمل" أو نتيجة أخرى، فلا تذعر: سجّله، ودوّن الوقت، وارفعه.</div>
+  <p class="muted" style="font-size:.86rem;margin-top:14px">خدمة Gulf ECG Diary مستقلّة وغير معتمدة من أي جهة مصنّعة للأجهزة أو مرتبطة بها.</p>`}},
+
+ {id:'conditions',icon:'📈',
+  en:{teaser:'Ectopics, AF and SVT — what the words mean.',title:'Ectopics, AF & SVT explained',
+  html:`<h3>Ectopic beats</h3><p>That skip, thud, or flutter is usually an ectopic beat — an early extra beat. In a healthy heart they are almost always harmless, even when they feel dramatic.</p>
+  <h3>Atrial fibrillation (AF)</h3><p>AF is an irregular, often faster rhythm coming from the upper chambers. It matters because, untreated, it raises stroke risk — which is why catching it on a trace is valuable.</p>
+  <h3>Supraventricular tachycardia (SVT)</h3><p>SVT is a sudden fast regular rhythm that starts and stops abruptly. It is usually not dangerous but can be very uncomfortable, and is often very treatable once identified.</p>
+  <div class="note info">If a diary reveals atrial fibrillation, SVT, significant pauses, or a high burden of extra beats, the report will recommend a prompt onward referral to your local cardiology service.</div>`},
+  ar:{teaser:'الضربات المنتبذة والرجفان وتسرّع SVT — ماذا تعني.',title:'الضربات المنتبذة والرجفان وSVT',
+  html:`<h3>الضربات المنتبذة</h3><p>تلك "القفزة" أو "الخفقة" أو "الرفرفة" عادةً ما تكون ضربة منتبذة — ضربة زائدة مبكرة. في القلب السليم تكون غالباً غير ضارة، حتى عندما تبدو مزعجة.</p>
+  <h3>الرجفان الأذيني (AF)</h3><p>الرجفان الأذيني نظم غير منتظم وغالباً أسرع، ينشأ من الحجرتين العلويتين. يهمّ لأنه دون علاج يرفع خطر السكتة — لذا فإن التقاطه على تخطيط أمر قيّم.</p>
+  <h3>تسرّع القلب فوق البطيني (SVT)</h3><p>هو نظم سريع منتظم يبدأ ويتوقّف فجأة. غالباً غير خطير لكنه قد يكون مزعجاً جداً، وكثيراً ما يكون قابلاً للعلاج بمجرد تحديده.</p>
+  <div class="note info">إذا كشفت المذكرة عن رجفان أذيني أو SVT أو توقّفات مهمة أو عبء عالٍ من الضربات الزائدة، فسيوصي التقرير بإحالة عاجلة إلى خدمة طب القلب المحلية لديك.</div>`}},
+
+ {id:'cast',icon:'📖',
+  en:{teaser:'A landmark trial that changed how we treat extra beats.',title:'The lesson of the CAST trial',
+  html:`<p>In 1989, a trial tested drugs that suppressed extra heartbeats after a heart attack — on the reasonable assumption that fewer extra beats would mean fewer deaths.</p>
+  <p>The trial was stopped early. Patients taking the drug were dying at roughly three times the rate of those who took nothing.</p>
+  <div class="evidence"><b>The lesson, which changed cardiology permanently:</b> extra heartbeats are often a signal, not always the problem. Silencing them without understanding them can be worse than leaving them alone.</div>
+  <p>This is why a careful ECG diary — understanding before acting — matters more than chasing every beat.</p>`},
+  ar:{teaser:'تجربة فارقة غيّرت طريقة علاجنا للضربات الزائدة.',title:'درس تجربة CAST',
+  html:`<p>في عام 1989، اختبرت تجربة أدوية تكبح الضربات الزائدة بعد النوبة القلبية — بافتراض معقول أن ضربات زائدة أقل تعني وفيات أقل.</p>
+  <p>أُوقفت التجربة مبكراً. كان المرضى الذين يتناولون الدواء يموتون بمعدّل يقارب ثلاثة أضعاف من لم يتناولوا شيئاً.</p>
+  <div class="evidence"><b>الدرس الذي غيّر طب القلب نهائياً:</b> الضربات الزائدة غالباً إشارة، وليست دائماً المشكلة نفسها. وإسكاتها دون فهمها قد يكون أسوأ من تركها.</div>
+  <p>لهذا فإن مذكرة تخطيط دقيقة — الفهم قبل التصرّف — أهم من ملاحقة كل نبضة.</p>`}},
+];
+function eduItem(id){ return EDU.find(e=>e.id===id); }
+
+/* ---------- i18n (UI strings) ---------- */
+const I18N={
+ en:{dir:'ltr',name:'English',other:'العربية',
+  nav_how:'How it works',nav_learn:'Learn',nav_safety:'Safety',nav_faq:'FAQ',nav_start:'Start',nav_admin:'Clinician',nav_dash:'My diary',
+  demo:'DEMO PROTOTYPE — no real payment, no real ECGs. All data stays in this browser.',
+  foot_tag:'Clinician-reviewed single-lead ECG diary for non-emergency rhythm concerns in the Gulf region.',
+  not_emergency:'Not an emergency service',
+  foot_legal:'Legal',foot_more:'Service',
+  terms:'Terms of Service',privacy:'Privacy Policy',disclaimer:'Medical Disclaimer',refund:'Refund Policy',contact:'Contact',
+  foot_disc:'This service provides remote review of uploaded single-lead ECG recordings for rhythm-related concerns. It is not an emergency medical service and does not replace urgent care, local medical assessment, or specialist cardiology consultation where clinically required. Educational content is general information, not personal medical advice. Final legal wording must be reviewed before launch.',
+  emergency_call:'contact your local emergency services or nearest emergency department',
+
+  hero_kicker:'Heart rhythm programme',
+  hero_h:'If your heart has been worrying you, you are not alone',
+  hero_sub:'Clinician-reviewed ECG diary for palpitations and rhythm concerns.',
+  hero_p:'Learn what your heart is actually doing, upload single-lead ECGs over one week, and receive one consolidated rhythm summary reviewed by a clinician.',
+  hero_price:'Choose what the service is worth to you — from £1 to £149.',
+  cta_start:'Start ECG diary review',cta_learn:'Explore the learning library',
+  trust_human:'Reviewed by a clinician',trust_private:'Private & confidential',trust_gulf:'Built for the Gulf',
+  hero_card_h:'One 7-day clinician-reviewed episode',
+  hero_card_li1:'Up to 20 single-lead ECG uploads',hero_card_li2:'One consolidated clinician summary',hero_card_li3:'Evidence-based education throughout',
+  hero_card_pay:'Pay any amount',
+
+  reassure_h:'Many palpitations are distressing but not dangerous',
+  reassure_p:'Palpitations are one of the most common reasons people see a cardiologist. The aim of this service is not to alarm you — it is to capture what your heart is actually doing, so uncertainty can be replaced with understanding.',
+
+  how_h:'How it works',
+  how:[
+    ['1','Check it is suitable','Answer a short eligibility and red-flag screen. Emergencies are redirected to local urgent care.'],
+    ['2','Choose what to pay','Move a slider to any amount from £1 to £149. Nothing is preselected.'],
+    ['3','Record over 7 days','Upload up to 20 single-lead ECGs during your diary week, noting symptoms each time.'],
+    ['4','Get one summary','A clinician reviews your whole diary and issues one consolidated rhythm summary with clear advice.'],
+  ],
+  journey_h:'Your 7-day journey',
+  journey:[
+    ['0','Screening & payment','A 2-minute safety screen, then you choose what to pay. Your diary starts the moment payment succeeds.'],
+    ['1–7','Record your week','Capture an ECG whenever you feel symptoms, plus one at rest each morning. Note what you were doing.'],
+    ['→','Clinician review','When you finish, a clinician reviews every trace together — not in isolation — to see the pattern.'],
+    ['✓','Your summary','You receive one consolidated, signed report: rhythm findings, symptom correlation, and a clear recommendation.'],
+  ],
+  forwho_h:'Who this is for',
+  forwho:['Palpitations or a fluttering / racing heartbeat','Intermittent irregular heartbeat','A wearable or single-lead ECG alert you want reviewed','A calm second opinion on consumer ECG strips','Low-risk, non-emergency rhythm concerns'],
+  notfor_h:'Who this is NOT for',
+  notfor:['Chest pain, pressure, heaviness or tightness','Fainting, collapse or near-collapse','Severe breathlessness at rest','Stroke-like symptoms (face / arm / speech)','Feeling seriously unwell or unsafe','A known unstable or serious heart condition'],
+
+  learn_h:'The learning library',
+  learn_sub:'Evidence-based, plain-language education about palpitations and heart rhythm. Read freely — no account needed.',
+  learn_back:'All articles',
+
+  pay_h:'Choose what to pay',
+  pay_p:'Choose what this clinician-reviewed ECG diary service is worth to you. Minimum £1. Maximum £149. There is no suggested or recommended amount.',
+  safety_h:'A note on safety',
+  limitation:'A single-lead ECG can help assess heart rhythm, but it does not diagnose all heart conditions. It does not rule out a heart attack, structural heart disease, or all intermittent rhythm problems. If symptoms are severe, worsening, or concerning, seek urgent local medical care.',
+  devices_note:'You can upload single-lead ECGs from consumer ECG devices such as KardiaMobile, Apple Watch ECG, or similar devices. Gulf ECG Diary is an independent service and is not endorsed by or affiliated with any device maker.',
+
+  elig_h:'Eligibility & safety screen',
+  elig_intro:'This takes about 2 minutes. Your answers help us check the service is suitable and safe for you.',
+  f_country:'Country',f_age:'Age',f_sex:'Sex',sex_m:'Male',sex_f:'Female',sex_n:'Prefer not to say',
+  f_symptom:'Main symptom',sym_palp:'Palpitations',sym_irr:'Irregular heartbeat',sym_alert:'Wearable / device alert',sym_routine:'Routine check',sym_other:'Other',
+  f_duration:'How long have you had this?',dur_today:'Started today',dur_days:'A few days',dur_weeks:'Weeks',dur_months:'Months',dur_years:'Years',
+  f_freq:'How often does it happen?',fr_once:'Once',fr_daily:'Daily',fr_weekly:'Weekly',fr_monthly:'Monthly',fr_inter:'Comes and goes',fr_other:'Other',
+  f_known:'Do you have a known heart condition?',f_meds:'Current medications (optional)',
+  f_device:'Which device do you use?',dev_km:'KardiaMobile',dev_km6:'KardiaMobile 6L',dev_aw:'Apple Watch ECG',dev_other:'Other single-lead device',dev_ns:'Not sure',
+  f_desc:'Briefly describe your symptoms (optional)',yes:'Yes',no:'No',
+  redflag_h:'Important safety questions',
+  redflag_intro:'Please answer honestly. If any of these apply, this service is not suitable and you should seek urgent care.',
+  rf:['Are you currently having chest pain, pressure, heaviness, or tightness?','Have you fainted, collapsed, or nearly collapsed?','Are you severely breathless at rest?','Do you have weakness of one side of the body, facial droop, speech difficulty, or possible stroke symptoms?','Do you feel extremely unwell or unsafe at home?','Have you been told you have an unstable or serious heart condition needing urgent care?','Have you had a recent hospital admission for heart symptoms?','Are you seeking help for an emergency now?'],
+  elig_submit:'Check my eligibility',elig_need:'Please complete all required questions, including every safety question.',
+  ns_h:'This service is not suitable for your symptoms',
+  ns_p:'Based on your answers, you should not use this non-emergency ECG diary. Please seek urgent medical care through your local emergency services or your nearest emergency department now.',
+  ns_emergency:'If you feel this is an emergency, contact your local emergency services immediately.',
+  ns_back:'Back to home',
+  res_h:'You can continue',res_p:'Your answers suggest this may be suitable for a non-emergency ECG diary review. You can continue to payment and upload your ECGs.',res_continue:'Continue to payment',
+  payp_h:'Choose your amount',payp_sub:'Minimum £1 — Maximum £149',payp_move:'Move the slider or type an amount',payp_selected:'Selected amount',payp_or:'or enter exactly',payp_continue:'Continue to secure payment',
+  payp_buying_h:'What you are buying',payp_buying:'One 7-day clinician-reviewed ECG diary episode: up to 20 single-lead ECG uploads and one consolidated clinician summary report.',
+  payp_pay_now:'Pay (test mode)',payp_processing:'Processing secure payment…',
+  payp_cap_full:'Monthly clinician review capacity is currently full. Because every ECG is reviewed by a clinician, new uploads are paused until more review capacity becomes available.',
+  up_h:'Upload your ECGs',up_intro:'You can upload up to 20 ECGs during your 7-day diary period. You will receive one consolidated clinician-reviewed summary.',
+  up_drop:'Tap to choose an ECG file (PDF, PNG, JPG, CSV, TXT, XML — max 20 MB)',
+  up_recorded:'When was this ECG recorded?',up_present:'Were you having symptoms at the time?',up_symtype:'Main symptom at the time',
+  st_palp:'Palpitations',st_dizzy:'Dizziness',st_chest:'Chest discomfort',st_breath:'Breathlessness',st_none:'None',st_other:'Other',
+  up_note:'Optional note',up_add:'Add this ECG to my diary',up_used:'ECGs used',
+  up_chestwarn:'You selected chest discomfort or a concerning symptom. If you have ongoing chest pain, severe breathlessness or feel unwell, stop and seek urgent local medical care. This upload has been flagged for priority clinician review.',
+  up_full:'You have reached the 20-ECG limit for this diary episode.',up_done:'Finish & request my report',
+  dash_h:'My ECG diary',dash_start:'Diary start',dash_end:'Diary end',dash_status:'Status',dash_report:'Report',dash_uploads:'Uploads used',dash_addmore:'Upload an ECG',dash_view_report:'View / download report',
+  dash_none:'You do not have an active diary yet.',dash_start_new:'Start a new diary',dash_days_left:'days left',dash_submitted:'Submitted ECGs',
+  st_PAYMENT_PENDING:'Awaiting payment',st_ACTIVE_DIARY:'Active diary',st_AWAITING_REVIEW:'Awaiting clinician review',st_IN_REVIEW:'In review',st_REPORT_READY:'Report ready',st_CLOSED:'Closed',st_ESCALATED:'Escalated for urgent review',
+  rep_h:'Clinician-Reviewed ECG Diary Summary',rep_notready:'Your report is not ready yet. A clinician will review your diary and you will be notified when your summary is available.',rep_download:'Download PDF',
+  rep_share_h:'Share',rep_share_p:'If someone you know has palpitations or a single-lead ECG they are worried about, you may share this service with them.',rep_share_btn:'Share on WhatsApp',
+  adm_h:'Clinician & admin dashboard',adm_login_h:'Clinician sign in',adm_login_p:'Demo access — no password needed in this prototype.',adm_enter:'Enter dashboard',
+  adm_month_uploads:'Uploads this month',adm_remaining:'Capacity remaining',adm_active:'Active episodes',adm_awaiting:'Awaiting review',adm_escal:'Escalated',adm_revenue:'Revenue this month',
+  adm_avg_pay:'Average payment',adm_rev_up:'Revenue per upload',adm_avg_up:'Avg uploads / patient',adm_reports:'Reports completed',adm_qa:'QA sampled',
+  adm_queue:'Review queue',
+  col_id:'Patient',col_country:'Country',col_agesex:'Age / Sex',col_amount:'Paid',col_ecgs:'ECGs',col_status:'Status',col_flag:'Flag',col_created:'Created',col_left:'Days left',col_action:'Action',
+  adm_open:'Open',adm_no_episodes:'No episodes yet. Complete the patient journey or load demo cases.',adm_seed:'Load demo cases',adm_back:'Back to queue',adm_ecgs_h:'Uploaded ECGs',
+  adm_classify:'Classification',adm_quality:'Signal quality',adm_build_h:'Build consolidated report',
+  adm_rhythm:'Rhythm summary',adm_sigsum:'Signal quality summary',adm_symcorr:'Symptom correlation',adm_comment:'Clinician comment',adm_recommend:'Recommendation',
+  adm_sign:'Sign & issue report',adm_escal_btn:'Escalate (urgent)',adm_assign_qa:'Assign to physiologist QA',adm_signed:'Report signed and issued to patient.',adm_signer:'Reviewing clinician',
+  filter_all:'All',filter_awaiting:'Awaiting',filter_urgent:'Urgent / escalated',filter_done:'Completed',
+  err_amount:'Please choose an amount between £1 and £149.',
+ },
+ ar:{dir:'rtl',name:'العربية',other:'English',
+  nav_how:'كيف تعمل',nav_learn:'تعلّم',nav_safety:'السلامة',nav_faq:'الأسئلة',nav_start:'ابدأ',nav_admin:'الطبيب',nav_dash:'مذكرتي',
+  demo:'نسخة تجريبية — لا دفع حقيقي ولا تخطيطات حقيقية. تبقى كل البيانات داخل هذا المتصفح.',
+  foot_tag:'مراجعة تخطيط القلب أحادي الاشتقاق من قِبل طبيب للحالات غير الطارئة المتعلقة بالنبض في منطقة الخليج.',
+  not_emergency:'ليست خدمة طوارئ',
+  foot_legal:'قانوني',foot_more:'الخدمة',
+  terms:'شروط الخدمة',privacy:'سياسة الخصوصية',disclaimer:'إخلاء المسؤولية الطبية',refund:'سياسة الاسترداد',contact:'اتصل بنا',
+  foot_disc:'تقدّم هذه الخدمة مراجعة عن بُعد لتخطيطات القلب أحادية الاشتقاق المرفوعة للحالات المتعلقة بالنبض. وهي ليست خدمة طوارئ ولا تغني عن الرعاية العاجلة أو التقييم الطبي المحلي أو استشارة طبيب القلب المختص عند الحاجة. المحتوى التعليمي معلومات عامة وليس نصيحة طبية شخصية. يجب مراجعة الصياغة القانونية النهائية قبل الإطلاق.',
+  emergency_call:'اتصل بخدمات الطوارئ المحلية أو أقرب قسم طوارئ',
+
+  hero_kicker:'برنامج نظم القلب',
+  hero_h:'إذا كان قلبك يقلقك، فأنت لست وحدك',
+  hero_sub:'مراجعة تخطيط القلب من قِبل طبيب لخفقان القلب واضطراب النبض.',
+  hero_p:'تعلّم ما يفعله قلبك فعلاً، وارفع تخطيطات أحادية الاشتقاق خلال أسبوع واحد، واحصل على ملخص واحد موحّد لحالة النبض بمراجعة طبيب.',
+  hero_price:'اختر المبلغ الذي تراه مناسباً للخدمة — من 1 إلى 149 جنيهاً إسترلينياً.',
+  cta_start:'ابدأ مراجعة تخطيط القلب',cta_learn:'استكشف المكتبة التعليمية',
+  trust_human:'مراجعة من قِبل طبيب',trust_private:'خاص وسرّي',trust_gulf:'مصمّم للخليج',
+  hero_card_h:'حلقة واحدة لمدة 7 أيام بمراجعة طبيب',
+  hero_card_li1:'حتى 20 تخطيطاً أحادي الاشتقاق',hero_card_li2:'ملخص واحد موحّد من الطبيب',hero_card_li3:'تعليم مبني على الأدلة في كل خطوة',
+  hero_card_pay:'ادفع أي مبلغ',
+
+  reassure_h:'كثير من حالات الخفقان مزعجة لكنها ليست خطيرة',
+  reassure_p:'الخفقان من أكثر الأسباب شيوعاً لزيارة طبيب القلب. هدف هذه الخدمة ليس إخافتك — بل التقاط ما يفعله قلبك فعلاً، لكي يحل الفهم محل الغموض.',
+
+  how_h:'كيف تعمل الخدمة',
+  how:[
+    ['1','تحقّق من ملاءمتها','أجب عن فحص قصير للأهلية والعلامات الخطيرة. تُحوّل الحالات الطارئة إلى الرعاية العاجلة المحلية.'],
+    ['2','اختر المبلغ','حرّك المؤشّر إلى أي مبلغ من 1 إلى 149 جنيهاً. لا يوجد مبلغ محدّد مسبقاً.'],
+    ['3','سجّل خلال 7 أيام','ارفع حتى 20 تخطيطاً أحادي الاشتقاق خلال أسبوع المذكرة مع تسجيل الأعراض كل مرة.'],
+    ['4','احصل على ملخص واحد','يراجع الطبيب مذكرتك كاملة ويصدر ملخصاً واحداً موحّداً للنبض مع نصائح واضحة.'],
+  ],
+  journey_h:'رحلتك خلال 7 أيام',
+  journey:[
+    ['0','الفحص والدفع','فحص سلامة من دقيقتين، ثم تختار المبلغ. تبدأ مذكرتك لحظة نجاح الدفع.'],
+    ['1–7','سجّل أسبوعك','التقط تخطيطاً كلما شعرت بأعراض، إضافةً إلى واحد أثناء الراحة كل صباح. دوّن ما كنت تفعله.'],
+    ['←','مراجعة الطبيب','عند الانتهاء، يراجع الطبيب كل التخطيطات معاً — لا منفردة — ليرى النمط.'],
+    ['✓','ملخّصك','تحصل على تقرير واحد موحّد وموقّع: نتائج النبض، وارتباط الأعراض، وتوصية واضحة.'],
+  ],
+  forwho_h:'لمن هذه الخدمة',
+  forwho:['الخفقان أو تسارع/رفرفة ضربات القلب','عدم انتظام متقطّع في ضربات القلب','تنبيه من ساعة ذكية أو جهاز أحادي الاشتقاق','رأي ثانٍ هادئ على تخطيطات الأجهزة الاستهلاكية','حالات نبض منخفضة الخطورة وغير طارئة'],
+  notfor_h:'لمن لا تصلح هذه الخدمة',
+  notfor:['ألم أو ضغط أو ثقل أو ضيق في الصدر','إغماء أو فقدان للوعي أو قرب الإغماء','ضيق شديد في التنفّس أثناء الراحة','أعراض شبيهة بالسكتة (الوجه/الذراع/الكلام)','الشعور بتوعّك شديد أو بعدم الأمان','حالة قلبية معروفة غير مستقرّة أو خطيرة'],
+
+  learn_h:'المكتبة التعليمية',
+  learn_sub:'تعليم مبني على الأدلة وبلغة بسيطة عن الخفقان ونظم القلب. اقرأ بحرية — دون حساب.',
+  learn_back:'كل المقالات',
+
+  pay_h:'اختر المبلغ',
+  pay_p:'اختر المبلغ الذي تراه مناسباً لهذه الخدمة بمراجعة طبيب. الحد الأدنى 1 جنيه والحد الأقصى 149 جنيهاً. لا يوجد مبلغ مقترح أو موصى به.',
+  safety_h:'ملاحظة حول السلامة',
+  limitation:'يساعد التخطيط أحادي الاشتقاق في تقييم نظم القلب، لكنه لا يشخّص جميع أمراض القلب. وهو لا يستبعد النوبة القلبية أو أمراض القلب البنيوية أو جميع اضطرابات النبض المتقطّعة. إذا كانت الأعراض شديدة أو تزداد سوءاً أو مقلقة، اطلب الرعاية الطبية العاجلة محلياً.',
+  devices_note:'يمكنك رفع تخطيطات أحادية الاشتقاق من أجهزة استهلاكية مثل KardiaMobile أو تخطيط Apple Watch أو أجهزة مماثلة. خدمة Gulf ECG Diary مستقلّة وغير معتمدة من أي جهة مصنّعة للأجهزة أو مرتبطة بها.',
+
+  elig_h:'فحص الأهلية والسلامة',elig_intro:'يستغرق هذا نحو دقيقتين. تساعدنا إجاباتك في التأكّد من أن الخدمة مناسبة وآمنة لك.',
+  f_country:'الدولة',f_age:'العمر',f_sex:'الجنس',sex_m:'ذكر',sex_f:'أنثى',sex_n:'أفضّل عدم الذكر',
+  f_symptom:'العرض الرئيسي',sym_palp:'خفقان',sym_irr:'عدم انتظام النبض',sym_alert:'تنبيه من جهاز',sym_routine:'فحص روتيني',sym_other:'أخرى',
+  f_duration:'منذ متى تعاني من ذلك؟',dur_today:'بدأ اليوم',dur_days:'بضعة أيام',dur_weeks:'أسابيع',dur_months:'أشهر',dur_years:'سنوات',
+  f_freq:'كم مرة يحدث؟',fr_once:'مرة واحدة',fr_daily:'يومياً',fr_weekly:'أسبوعياً',fr_monthly:'شهرياً',fr_inter:'يأتي ويذهب',fr_other:'أخرى',
+  f_known:'هل لديك حالة قلبية معروفة؟',f_meds:'الأدوية الحالية (اختياري)',
+  f_device:'أي جهاز تستخدم؟',dev_km:'KardiaMobile',dev_km6:'KardiaMobile 6L',dev_aw:'تخطيط Apple Watch',dev_other:'جهاز أحادي الاشتقاق آخر',dev_ns:'غير متأكد',
+  f_desc:'صف أعراضك باختصار (اختياري)',yes:'نعم',no:'لا',
+  redflag_h:'أسئلة مهمة للسلامة',redflag_intro:'يرجى الإجابة بصدق. إذا انطبق أي مما يلي فإن الخدمة غير مناسبة وعليك طلب الرعاية العاجلة.',
+  rf:['هل تعاني حالياً من ألم أو ضغط أو ثقل أو ضيق في الصدر؟','هل أُغمي عليك أو فقدت وعيك أو كدت أن تفقده؟','هل تعاني من ضيق شديد في التنفّس أثناء الراحة؟','هل لديك ضعف في أحد جانبي الجسم أو تدلٍّ في الوجه أو صعوبة في الكلام أو أعراض سكتة محتملة؟','هل تشعر بتوعّك شديد أو بعدم الأمان في المنزل؟','هل قيل لك إن لديك حالة قلبية غير مستقرّة أو خطيرة تحتاج رعاية عاجلة؟','هل دخلت المستشفى مؤخراً بسبب أعراض قلبية؟','هل تطلب المساعدة لحالة طارئة الآن؟'],
+  elig_submit:'تحقّق من أهليتي',elig_need:'يرجى إكمال جميع الأسئلة المطلوبة، بما في ذلك جميع أسئلة السلامة.',
+  ns_h:'هذه الخدمة غير مناسبة لأعراضك',
+  ns_p:'بناءً على إجاباتك، يجب ألا تستخدم مذكرة تخطيط القلب غير الطارئة هذه. يرجى طلب الرعاية الطبية العاجلة عبر خدمات الطوارئ المحلية أو أقرب قسم طوارئ الآن.',
+  ns_emergency:'إذا شعرت أن هذه حالة طارئة، فاتصل بخدمات الطوارئ المحلية فوراً.',ns_back:'العودة للرئيسية',
+  res_h:'يمكنك المتابعة',res_p:'تشير إجاباتك إلى أن هذه الحالة قد تكون مناسبة لمراجعة مذكرة تخطيط قلب غير طارئة. يمكنك المتابعة إلى الدفع ورفع تخطيطاتك.',res_continue:'المتابعة إلى الدفع',
+  payp_h:'اختر مبلغك',payp_sub:'الحد الأدنى 1 جنيه — الحد الأقصى 149 جنيهاً',payp_move:'حرّك المؤشّر أو اكتب مبلغاً',payp_selected:'المبلغ المختار',payp_or:'أو أدخل مبلغاً بالضبط',payp_continue:'المتابعة إلى الدفع الآمن',
+  payp_buying_h:'ما الذي تشتريه',payp_buying:'حلقة واحدة لمدة 7 أيام بمراجعة طبيب: حتى 20 تخطيطاً أحادي الاشتقاق وتقرير ملخص واحد موحّد.',
+  payp_pay_now:'ادفع (وضع تجريبي)',payp_processing:'جارٍ معالجة الدفع الآمن…',
+  payp_cap_full:'سعة المراجعة الشهرية من قِبل الطبيب ممتلئة حالياً. لأن كل تخطيط يُراجع من قِبل طبيب، تم إيقاف الرفع الجديد مؤقتاً حتى تتوفّر سعة أكبر.',
+  up_h:'ارفع تخطيطاتك',up_intro:'يمكنك رفع حتى 20 تخطيطاً خلال فترة المذكرة البالغة 7 أيام. ستحصل على ملخص واحد موحّد بمراجعة طبيب.',
+  up_drop:'اضغط لاختيار ملف تخطيط (PDF أو PNG أو JPG أو CSV أو TXT أو XML — بحد أقصى 20 ميجابايت)',
+  up_recorded:'متى سُجِّل هذا التخطيط؟',up_present:'هل كانت لديك أعراض في ذلك الوقت؟',up_symtype:'العرض الرئيسي في ذلك الوقت',
+  st_palp:'خفقان',st_dizzy:'دوخة',st_chest:'انزعاج في الصدر',st_breath:'ضيق في التنفّس',st_none:'لا شيء',st_other:'أخرى',
+  up_note:'ملاحظة اختيارية',up_add:'أضف هذا التخطيط إلى مذكرتي',up_used:'التخطيطات المستخدمة',
+  up_chestwarn:'لقد اخترت انزعاجاً في الصدر أو عرضاً مقلقاً. إذا كان لديك ألم صدر مستمر أو ضيق تنفّس شديد أو شعرت بتوعّك، فتوقّف واطلب الرعاية الطبية العاجلة محلياً. تم وضع علامة على هذا الرفع لمراجعة طبيب عاجلة.',
+  up_full:'لقد وصلت إلى الحد الأقصى البالغ 20 تخطيطاً لهذه الحلقة.',up_done:'إنهاء وطلب تقريري',
+  dash_h:'مذكرة تخطيط القلب',dash_start:'بداية المذكرة',dash_end:'نهاية المذكرة',dash_status:'الحالة',dash_report:'التقرير',dash_uploads:'التخطيطات المستخدمة',dash_addmore:'ارفع تخطيطاً',dash_view_report:'عرض / تنزيل التقرير',
+  dash_none:'ليس لديك مذكرة نشطة بعد.',dash_start_new:'ابدأ مذكرة جديدة',dash_days_left:'أيام متبقية',dash_submitted:'التخطيطات المُرسَلة',
+  st_PAYMENT_PENDING:'بانتظار الدفع',st_ACTIVE_DIARY:'مذكرة نشطة',st_AWAITING_REVIEW:'بانتظار مراجعة الطبيب',st_IN_REVIEW:'قيد المراجعة',st_REPORT_READY:'التقرير جاهز',st_CLOSED:'مغلقة',st_ESCALATED:'مُصعّدة لمراجعة عاجلة',
+  rep_h:'ملخص مذكرة تخطيط القلب بمراجعة طبيب',rep_notready:'تقريرك ليس جاهزاً بعد. سيراجع الطبيب مذكرتك وسيتم إعلامك عند توفّر ملخّصك.',rep_download:'تنزيل PDF',
+  rep_share_h:'مشاركة',rep_share_p:'إذا كان أحد تعرفه يعاني من الخفقان أو لديه تخطيط أحادي الاشتقاق يقلقه، يمكنك مشاركة هذه الخدمة معه.',rep_share_btn:'المشاركة عبر واتساب',
+  adm_h:'لوحة الطبيب والإدارة',adm_login_h:'تسجيل دخول الطبيب',adm_login_p:'وصول تجريبي — لا حاجة لكلمة مرور في هذه النسخة.',adm_enter:'دخول اللوحة',
+  adm_month_uploads:'التخطيطات هذا الشهر',adm_remaining:'السعة المتبقية',adm_active:'الحلقات النشطة',adm_awaiting:'بانتظار المراجعة',adm_escal:'مُصعّدة',adm_revenue:'الإيراد هذا الشهر',
+  adm_avg_pay:'متوسّط الدفع',adm_rev_up:'الإيراد لكل تخطيط',adm_avg_up:'متوسّط التخطيطات/مريض',adm_reports:'التقارير المكتملة',adm_qa:'عيّنة الجودة',
+  adm_queue:'قائمة المراجعة',
+  col_id:'المريض',col_country:'الدولة',col_agesex:'العمر/الجنس',col_amount:'المدفوع',col_ecgs:'التخطيطات',col_status:'الحالة',col_flag:'علامة',col_created:'أُنشئت',col_left:'الأيام المتبقية',col_action:'إجراء',
+  adm_open:'فتح',adm_no_episodes:'لا توجد حلقات بعد. أكمل رحلة المريض أو حمّل حالات تجريبية.',adm_seed:'تحميل حالات تجريبية',adm_back:'العودة للقائمة',adm_ecgs_h:'التخطيطات المرفوعة',
+  adm_classify:'التصنيف',adm_quality:'جودة الإشارة',adm_build_h:'إنشاء التقرير الموحّد',
+  adm_rhythm:'ملخص النبض',adm_sigsum:'ملخص جودة الإشارة',adm_symcorr:'ارتباط الأعراض',adm_comment:'تعليق الطبيب',adm_recommend:'التوصية',
+  adm_sign:'توقيع وإصدار التقرير',adm_escal_btn:'تصعيد (عاجل)',adm_assign_qa:'إحالة لمراجعة جودة الفسيولوجي',adm_signed:'تم توقيع التقرير وإصداره للمريض.',adm_signer:'الطبيب المراجع',
+  filter_all:'الكل',filter_awaiting:'بانتظار',filter_urgent:'عاجل/مُصعّد',filter_done:'مكتمل',
+  err_amount:'يرجى اختيار مبلغ بين 1 و149 جنيهاً.',
+ }
+};
+
+/* ---------- State ---------- */
+const LS='gulfecg_v2';
+function loadDB(){ try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return {}} }
+function save(){ localStorage.setItem(LS,JSON.stringify(DB)); }
+let DB=loadDB();
+DB.episodes=DB.episodes||[]; DB.monthlyUploads=DB.monthlyUploads||0; DB.lang=DB.lang||'en'; DB.draftElig=DB.draftElig||null;
+let lang=DB.lang;
+function t(k){ const v=I18N[lang][k]; return v!==undefined?v:(I18N.en[k]!==undefined?I18N.en[k]:k); }
+function gbp(n){ return '£'+n; }
+
+const CLASS_OPTS={NORMAL_SINUS_RHYTHM:{en:'Normal sinus rhythm',ar:'نظم جيبي طبيعي'},BENIGN_ECTOPY:{en:'Benign ectopy',ar:'ضربات منتبذة حميدة'},POSSIBLE_AF:{en:'Possible AF',ar:'رجفان أذيني محتمل'},IRREGULAR_RHYTHM:{en:'Irregular rhythm',ar:'نظم غير منتظم'},TACHYCARDIA:{en:'Tachycardia',ar:'تسرّع القلب'},BRADYCARDIA:{en:'Bradycardia',ar:'بطء القلب'},NOISY_INCONCLUSIVE:{en:'Noisy / inconclusive',ar:'تشويش / غير حاسم'},HIGH_RISK_PATTERN:{en:'High-risk pattern',ar:'نمط عالي الخطورة'},OTHER:{en:'Other',ar:'أخرى'}};
+const QUAL_OPTS={GOOD:{en:'Good',ar:'جيدة'},ADEQUATE:{en:'Adequate',ar:'مقبولة'},POOR:{en:'Poor',ar:'ضعيفة'},UNINTERPRETABLE:{en:'Uninterpretable',ar:'غير قابلة للتفسير'}};
+const RECO_OPTS={REASSURANCE:{en:'Reassurance',ar:'طمأنة'},LOCAL_DOCTOR_FOLLOW_UP:{en:'Local doctor follow-up',ar:'متابعة مع طبيب محلي'},ROUTINE_CARDIOLOGY_REVIEW:{en:'Routine cardiology review',ar:'مراجعة روتينية لطبيب قلب'},REPEAT_ECG_OR_SUPERVISED_ECG:{en:'Repeat / supervised ECG',ar:'إعادة التخطيط أو تخطيط تحت إشراف'},URGENT_MEDICAL_REVIEW:{en:'Urgent medical review',ar:'مراجعة طبية عاجلة'},EMERGENCY_ADVICE:{en:'Emergency advice',ar:'نصيحة طوارئ'},INCONCLUSIVE:{en:'Inconclusive',ar:'غير حاسم'}};
+const COUNTRIES=['UAE','Saudi Arabia','Qatar','Kuwait','Bahrain','Oman','Other'];
+const COUNTRIES_AR={'UAE':'الإمارات','Saudi Arabia':'السعودية','Qatar':'قطر','Kuwait':'الكويت','Bahrain':'البحرين','Oman':'عُمان','Other':'أخرى'};
+function cName(c){ return lang==='ar'?(COUNTRIES_AR[c]||c):c; }
+
+/* ---------- helpers ---------- */
+function uid(p){ return (p||'id')+'_'+Math.random().toString(36).slice(2,9); }
+function nowISO(){ return new Date().toISOString(); }
+function fmtDate(iso){ if(!iso)return '—'; return new Date(iso).toLocaleDateString(lang==='ar'?'ar':'en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function fmtDateTime(iso){ if(!iso)return '—'; return new Date(iso).toLocaleString(lang==='ar'?'ar':'en-GB',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }
+function addDays(iso,n){ const d=new Date(iso); d.setDate(d.getDate()+n); return d.toISOString(); }
+function daysLeft(ep){ return Math.max(0,Math.ceil((new Date(ep.diary_end_at)-new Date())/864e5)); }
+function esc(s){ return (s||'').toString().replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
+
+function ecgSVG(){ return `<svg class="ecg-strip" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true"><rect width="600" height="90" fill="#f1f7f6"/><path d="M0 54 H60 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H120 H180 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H240 H300 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H360 H420 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H480 H540 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H600" fill="none" stroke="#0f6f80" stroke-width="2"/></svg>`; }
+function stepRow(n,h,b){ return `<div class="jrow"><div class="jdot">${n}</div><div><h3 style="margin:.1em 0 .2em">${h}</h3><p class="muted" style="margin:0">${b}</p></div></div>`; }
+function loopDiagram(l){
+  const items = l==='ar'
+    ? ['تشعر بنبضة','يزداد الانتباه للقلب','يرتفع القلق','تلاحظ نبضات أكثر']
+    : ['You feel a beat','Attention turns to the heart','Anxiety rises','You notice even more'];
+  return `<div class="grid cols-4" style="margin:14px 0">${items.map((x,i)=>`<div class="card center" style="padding:16px"><div style="font-size:1.3rem">${['💓','🔍','😟','🔁'][i]}</div><b style="font-size:.92rem">${x}</b></div>`).join('')}</div>`;
+}
+function breathBlock(l){
+  return `<div class="breath-ring">${l==='ar'?'شهيق 4<br>زفير 6':'In 4<br>Out 6'}</div>`;
+}
+
+/* ---------- Router ---------- */
+function go(route,param){ location.hash='#/'+route+(param?('/'+param):''); }
+function currentRoute(){ const h=location.hash.replace(/^#\/?/,''); const p=h.split('/').filter(Boolean); return {route:p[0]||'home',param:p[1]||null}; }
+window.addEventListener('hashchange',()=>{closeMobileNav();render();});
+window.addEventListener('load',()=>{applyLang();render();});
+
+/* ---------- Language / nav ---------- */
+function applyLang(){
+  const m=I18N[lang];
+  document.documentElement.lang=lang; document.documentElement.dir=m.dir;
+  document.getElementById('langToggle').textContent=m.other;
+  document.getElementById('demoBanner').textContent=t('demo');
+  document.getElementById('footTag').textContent=t('foot_tag');
+  document.getElementById('footNotEmergency').textContent='⚠ '+t('not_emergency');
+  document.getElementById('footLegalH').textContent=t('foot_legal');
+  document.getElementById('footMoreH').textContent=t('foot_more');
+  document.getElementById('footDisc').textContent=t('foot_disc');
+  document.getElementById('footLegalLinks').innerHTML=[['terms','terms'],['privacy','privacy'],['disclaimer','disclaimer'],['refund','refund'],['contact','contact']].map(([r,k])=>`<li><a href="#/${r}">${t(k)}</a></li>`).join('');
+  document.getElementById('footMoreLinks').innerHTML=[['learn','nav_learn'],['how-it-works','nav_how'],['safety','nav_safety'],['faq','nav_faq'],['admin','nav_admin']].map(([r,k])=>`<li><a href="#/${r}">${t(k)}</a></li>`).join('');
+  buildTopNav();
+}
+function toggleLang(){ lang=lang==='en'?'ar':'en'; DB.lang=lang; save(); applyLang(); render(); }
+const NAVITEMS=[['learn','nav_learn'],['how-it-works','nav_how'],['safety','nav_safety'],['faq','nav_faq'],['dashboard','nav_dash'],['admin','nav_admin']];
+function buildTopNav(){
+  document.getElementById('topnav').innerHTML=NAVITEMS.map(([r,k])=>`<a class="navlink" href="#/${r}">${t(k)}</a>`).join('')+`<button class="btn sm" style="margin-inline-start:8px" onclick="go('eligibility')">${t('nav_start')}</button>`;
+  document.getElementById('mobileNav').innerHTML='<div class="wrap" style="display:grid;gap:2px;padding:8px 20px">'+NAVITEMS.map(([r,k])=>`<a class="navlink" href="#/${r}" onclick="closeMobileNav()">${t(k)}</a>`).join('')+`<button class="btn sm" style="margin-top:6px" onclick="closeMobileNav();go('eligibility')">${t('nav_start')}</button></div>`;
+}
+function toggleMobileNav(){ document.getElementById('mobileNav').classList.toggle('hidden'); }
+function closeMobileNav(){ document.getElementById('mobileNav').classList.add('hidden'); }
+
+/* ---------- Dispatcher ---------- */
+const app=()=>document.getElementById('app');
+function render(){
+  buildTopNav();
+  const {route,param}=currentRoute(); window.scrollTo(0,0);
+  const map={home:viewHome,'how-it-works':viewHow,learn:viewLearn,safety:viewSafety,faq:viewFAQ,
+    eligibility:viewEligibility,start:viewEligibility,'not-suitable':viewNotSuitable,
+    payment:viewPayment,upload:viewUpload,dashboard:viewDashboard,report:viewReport,admin:viewAdmin,
+    terms:()=>viewLegal('terms'),privacy:()=>viewLegal('privacy'),disclaimer:()=>viewLegal('disclaimer'),refund:()=>viewLegal('refund'),contact:()=>viewLegal('contact')};
+  (map[route]||viewHome)(param);
+}
+
+/* ============================================================ VIEWS ============================================================ */
+function viewHome(){
+  const m=I18N[lang];
+  app().innerHTML=`
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="kicker">${t('hero_kicker')}</span>
+        <h1 style="margin-top:8px">${t('hero_h')}</h1>
+        <p class="sub">${t('hero_sub')}</p>
+        <p class="lead">${t('hero_p')}</p>
+        <p class="lead" style="font-weight:600;color:#0a4d59">${t('hero_price')}</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn lg" onclick="go('eligibility')">${t('cta_start')}</button>
+          <button class="btn ghost lg" onclick="go('learn')">${t('cta_learn')}</button>
+        </div>
+        <div class="trust-row">
+          <span>👨‍⚕️ ${t('trust_human')}</span><span>🔒 ${t('trust_private')}</span><span>🌙 ${t('trust_gulf')}</span>
+        </div>
+      </div>
+      <div class="hero-card">
+        ${ecgSVG()}
+        <h3 style="margin-top:16px">${t('hero_card_h')}</h3>
+        <ul class="clean muted" style="font-size:.94rem">
+          <li>${t('hero_card_li1')}</li><li>${t('hero_card_li2')}</li><li>${t('hero_card_li3')}</li>
+        </ul>
+        <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line2);padding-top:13px;margin-top:6px">
+          <span class="muted">${t('hero_card_pay')}</span><span class="price-tag">£1–£149</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap narrow center">
+      <span class="pill good" style="margin-bottom:14px">${t('not_emergency')} · ${lang==='ar'?'خدمة هادئة':'a calm service'}</span>
+      <h2>${t('reassure_h')}</h2>
+      <p class="lead">${t('reassure_p')}</p>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="section-head"><span class="kicker">${t('how_h')}</span><h2>${t('how_h')}</h2></div>
+      <div class="grid cols-4">
+        ${m.how.map(s=>`<div class="card"><span class="pill">${s[0]}</span><h3 style="margin-top:12px">${s[1]}</h3><p class="muted" style="margin:0">${s[2]}</p></div>`).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap">
+      <div class="section-head"><span class="kicker">${t('journey_h')}</span><h2>${t('journey_h')}</h2></div>
+      <div class="journey narrow" style="margin:0">
+        ${m.journey.map(s=>stepRow(s[0],s[1],s[2])).join('')}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>${t('forwho_h')}</h3>
+          <ul class="clean muted">${m.forwho.map(x=>`<li>✓ ${x}</li>`).join('')}</ul>
+        </div>
+        <div class="card" style="border-color:#eedcbf;background:#fffaf2">
+          <h3 style="color:#7a3d00">${t('notfor_h')}</h3>
+          <ul class="clean" style="color:#7a3d00">${m.notfor.map(x=>`<li>✕ ${x}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band tint">
+    <div class="wrap">
+      <div class="section-head"><span class="kicker">${t('nav_learn')}</span><h2>${t('learn_h')}</h2><p class="muted">${t('learn_sub')}</p></div>
+      <div class="grid cols-3">
+        ${EDU.slice(0,6).map(e=>eduCardHTML(e)).join('')}
+      </div>
+      <div style="margin-top:20px"><button class="btn ghost" onclick="go('learn')">${t('cta_learn')} →</button></div>
+    </div>
+  </section>
+
+  <section class="band alt">
+    <div class="wrap narrow">
+      <div class="card">
+        <h2>${t('pay_h')}</h2>
+        <p class="muted">${t('pay_p')}</p>
+        <button class="btn" onclick="go('eligibility')">${t('cta_start')}</button>
+      </div>
+      <div class="note danger" style="margin-top:18px"><b>⚠ ${t('not_emergency')}.</b> ${t('limitation')}</div>
+      <p class="muted" style="font-size:.84rem;margin-top:12px">${t('devices_note')}</p>
+    </div>
+  </section>`;
+}
+function eduCardHTML(e){ const c=e[lang]; return `<a class="edu-card" href="#/learn/${e.id}"><div class="edu-ico">${e.icon}</div><h3>${c.title}</h3><p>${c.teaser}</p></a>`; }
+
+function viewHow(){
+  const m=I18N[lang];
+  app().innerHTML=`<div class="wrap"><div class="narrow">
+    <h1>${t('how_h')}</h1>
+    <div class="grid cols-2" style="margin:22px 0">
+      ${m.how.map(s=>`<div class="card"><span class="pill">${s[0]}</span><h3 style="margin-top:12px">${s[1]}</h3><p class="muted" style="margin:0">${s[2]}</p></div>`).join('')}
+    </div>
+    <h2>${t('journey_h')}</h2>
+    <div class="journey" style="margin:18px 0">${m.journey.map(s=>stepRow(s[0],s[1],s[2])).join('')}</div>
+    <div class="note info" style="margin-bottom:18px">${t('payp_buying')}</div>
+    <button class="btn" onclick="go('eligibility')">${t('cta_start')}</button>
+  </div></div>`;
+}
+
+/* ----- Learn hub + article ----- */
+function viewLearn(param){
+  if(param){ return viewLearnArticle(param); }
+  app().innerHTML=`<div class="wrap">
+    <div class="section-head"><span class="kicker">${t('nav_learn')}</span><h1>${t('learn_h')}</h1><p class="lead">${t('learn_sub')}</p></div>
+    <div class="grid cols-3">${EDU.map(e=>eduCardHTML(e)).join('')}</div>
+    <div class="note danger" style="margin-top:26px"><b>⚠ ${t('not_emergency')}.</b> ${t('limitation')}</div>
+    <div style="margin-top:18px"><button class="btn" onclick="go('eligibility')">${t('cta_start')}</button></div>
+  </div>`;
+}
+function viewLearnArticle(id){
+  const e=eduItem(id); if(!e){ go('learn'); return; }
+  const c=e[lang];
+  const idx=EDU.indexOf(e); const prev=EDU[idx-1], next=EDU[idx+1];
+  app().innerHTML=`<div class="wrap">
+    <a class="navlink" href="#/learn" style="padding-inline-start:0">← ${t('learn_back')}</a>
+    <div class="edu-layout" style="margin-top:14px">
+      <nav class="anchor-nav">${EDU.map(x=>`<a href="#/learn/${x.id}" style="${x.id===id?'background:var(--brand-soft);color:var(--brand-dk);font-weight:600':''}">${x.icon} ${x[lang].title}</a>`).join('')}</nav>
+      <article>
+        <div class="edu-ico" style="width:52px;height:52px;font-size:1.6rem">${e.icon}</div>
+        <h1>${c.title}</h1>
+        <div class="edu-body">${c.html}</div>
+        <div class="note info" style="margin-top:26px"><b>${lang==='ar'?'جاهز لالتقاط ما يفعله قلبك؟':'Ready to capture what your heart is doing?'}</b> <button class="btn sm" style="margin-inline-start:8px" onclick="go('eligibility')">${t('cta_start')}</button></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;margin-top:24px;flex-wrap:wrap">
+          <div>${prev?`<button class="btn ghost sm" onclick="go('learn','${prev.id}')">← ${prev[lang].title}</button>`:''}</div>
+          <div>${next?`<button class="btn ghost sm" onclick="go('learn','${next.id}')">${next[lang].title} →</button>`:''}</div>
+        </div>
+        <p class="muted" style="font-size:.8rem;margin-top:20px">${t('foot_disc')}</p>
+      </article>
+    </div>
+  </div>`;
+}
+
+function viewSafety(){
+  app().innerHTML=`<div class="wrap narrow">
+    <h1>${t('safety_h')}</h1>
+    <div class="note danger" style="margin-bottom:16px"><b>⚠ ${t('not_emergency')}.</b></div>
+    <div class="card" style="margin-bottom:16px"><p style="margin:0">${t('limitation')}</p></div>
+    <div class="card" style="margin-bottom:16px">
+      <h3>${t('notfor_h')}</h3>
+      <ul class="clean" style="color:#7a3d00">${I18N[lang].notfor.map(x=>`<li>✕ ${x}</li>`).join('')}</ul>
+      <p class="muted" style="margin:0">${t('ns_emergency')}</p>
+    </div>
+    <div class="card" style="margin-bottom:16px"><h3>${eduItem('when-it-happens')[lang].title}</h3><div class="edu-body">${eduItem('when-it-happens')[lang].html}</div></div>
+    <p class="muted" style="font-size:.86rem">${t('devices_note')}</p>
+    <button class="btn" onclick="go('eligibility')">${t('cta_start')}</button>
+  </div>`;
+}
+
+function viewFAQ(){
+  const faqs=lang==='ar'?[
+    ['هل هذه خدمة طوارئ؟','لا. هذه ليست خدمة طوارئ. إذا كان لديك ألم في الصدر أو إغماء أو ضيق تنفّس شديد أو أعراض شبيهة بالسكتة أو شعرت بتوعّك شديد، اطلب الرعاية الطبية العاجلة محلياً.'],
+    ['ما الأجهزة التي يمكنني استخدامها؟','يمكنك رفع تخطيطات أحادية الاشتقاق من أجهزة استهلاكية مثل KardiaMobile أو تخطيط Apple Watch أو أجهزة مماثلة، شرط أن يكون التخطيط واضحاً بما يكفي للمراجعة.'],
+    ['هل سأحصل على 20 تقريراً منفصلاً؟','لا. يمكنك رفع حتى 20 تخطيطاً خلال فترة المذكرة، لكنك تحصل على ملخص واحد موحّد بمراجعة طبيب.'],
+    ['هل يستبعد التخطيط أحادي الاشتقاق كل مشاكل القلب؟','لا. يساعد في تقييم النبض لكنه لا يستبعد جميع أمراض القلب أو النوبة القلبية أو أمراض القلب البنيوية أو جميع اضطرابات النبض المتقطّعة.'],
+    ['لماذا أختار المبلغ الذي أدفعه؟','نريد أن تكون الخدمة في المتناول مع الاعتراف بأن وقت الطبيب له قيمة. اختر المبلغ الذي تراه مناسباً، من 1 إلى 149 جنيهاً.'],
+    ['هل يراجع تخطيطي إنسان؟','نعم. تُراجَع مذكرات التخطيط من قِبل طبيب. وقد تخضع حالات مختارة أيضاً لمراجعة جودة من اختصاصي فسيولوجي أو لمراجعة تصعيد.'],
+  ]:[
+    ['Is this an emergency service?','No. This is not an emergency service. If you have chest pain, fainting, severe breathlessness, stroke-like symptoms, or feel seriously unwell, seek urgent local medical care.'],
+    ['What ECG devices can I use?','You can upload single-lead ECGs from consumer ECG devices such as KardiaMobile, Apple Watch ECG, or similar devices, provided the tracing is clear enough to review.'],
+    ['Will I get 20 separate reports?','No. You may upload up to 20 ECGs during your diary period, but you receive one consolidated clinician-reviewed summary.'],
+    ['Can a single-lead ECG rule out all heart problems?','No. A single-lead ECG can help assess rhythm but does not rule out all heart conditions, heart attack, structural heart disease, or all intermittent arrhythmias.'],
+    ['Why can I choose what to pay?','We want the service to be accessible while recognising that clinician time has value. You choose what the service is worth to you, from £1 to £149.'],
+    ['Is my ECG reviewed by a human?','Yes. ECG diaries are reviewed by a clinician. Selected cases may also undergo physiologist quality review or escalation review.'],
+  ];
+  app().innerHTML=`<div class="wrap narrow"><h1>${t('nav_faq')}</h1>
+    ${faqs.map((f,i)=>`<div class="accordion"><button onclick="this.nextElementSibling.classList.toggle('hidden')">${f[0]}<span>＋</span></button><div class="${i===0?'':'hidden'}">${f[1]}</div></div>`).join('')}
+    <div style="margin-top:18px"><button class="btn" onclick="go('eligibility')">${t('cta_start')}</button></div></div>`;
+}
+
+/* ----- Eligibility ----- */
+function eligSteps(active){ const s=['elig_h','pay_h','up_h','rep_h']; return `<div class="steps">${s.map((k,i)=>`<div class="step ${i<active?'done':(i===active?'active':'')}"><b>${i+1}</b>${t(k)}</div>`).join('')}</div>`; }
+function viewEligibility(){
+  const m=I18N[lang];
+  const sel=(id,opts)=>`<select id="${id}"><option value="">—</option>${opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select>`;
+  app().innerHTML=`<div class="wrap narrow">
+    ${eligSteps(0)}
+    <h1>${t('elig_h')}</h1><p class="muted">${t('elig_intro')}</p>
+    <div class="card" style="margin-bottom:18px">
+      <div class="grid cols-2">
+        <div class="field"><label class="f">${t('f_country')} *</label>${sel('e_country',COUNTRIES.map(c=>[c,cName(c)]))}</div>
+        <div class="field"><label class="f">${t('f_age')} *</label><input type="number" id="e_age" min="1" max="120"></div>
+        <div class="field"><label class="f">${t('f_sex')} *</label>${sel('e_sex',[['male',t('sex_m')],['female',t('sex_f')],['prefer_not_to_say',t('sex_n')]])}</div>
+        <div class="field"><label class="f">${t('f_symptom')} *</label>${sel('e_symptom',[['palpitations',t('sym_palp')],['irregular_heartbeat',t('sym_irr')],['wearable_alert',t('sym_alert')],['routine_check',t('sym_routine')],['other',t('sym_other')]])}</div>
+        <div class="field"><label class="f">${t('f_duration')}</label>${sel('e_duration',[['today',t('dur_today')],['days',t('dur_days')],['weeks',t('dur_weeks')],['months',t('dur_months')],['years',t('dur_years')]])}</div>
+        <div class="field"><label class="f">${t('f_freq')}</label>${sel('e_freq',[['once',t('fr_once')],['daily',t('fr_daily')],['weekly',t('fr_weekly')],['monthly',t('fr_monthly')],['intermittent',t('fr_inter')],['other',t('fr_other')]])}</div>
+        <div class="field"><label class="f">${t('f_device')}</label>${sel('e_device',[['KardiaMobile',t('dev_km')],['KardiaMobile 6L',t('dev_km6')],['Apple Watch ECG',t('dev_aw')],['Other single-lead device',t('dev_other')],['Not sure',t('dev_ns')]])}</div>
+        <div class="field"><label class="f">${t('f_known')}</label>${sel('e_known',[['yes',t('yes')],['no',t('no')]])}</div>
+      </div>
+      <div class="field"><label class="f">${t('f_meds')}</label><input type="text" id="e_meds"></div>
+      <div class="field"><label class="f">${t('f_desc')}</label><textarea id="e_desc"></textarea></div>
+    </div>
+    <div class="card">
+      <h3>${t('redflag_h')}</h3>
+      <div class="note warn" style="margin-bottom:14px">${t('redflag_intro')}</div>
+      ${m.rf.map((q,i)=>`<div class="redflag-q"><div class="q">${i+1}. ${q}</div><div class="yn"><label><input type="radio" name="rf${i}" value="yes"> ${t('yes')}</label><label><input type="radio" name="rf${i}" value="no"> ${t('no')}</label></div></div>`).join('')}
+    </div>
+    <div id="eligErr"></div>
+    <div style="margin-top:16px"><button class="btn block lg" onclick="submitEligibility()">${t('elig_submit')}</button></div>
+  </div>`;
+}
+function submitEligibility(){
+  const v=id=>document.getElementById(id).value;
+  const required=['e_country','e_age','e_sex','e_symptom']; let ok=required.every(id=>v(id)); const rf=[];
+  for(let i=0;i<8;i++){ const r=document.querySelector(`input[name=rf${i}]:checked`); if(!r)ok=false; rf.push(r?r.value:null); }
+  if(!ok){ document.getElementById('eligErr').innerHTML=`<div class="note danger" style="margin-top:12px">${t('elig_need')}</div>`; return; }
+  const anyFlag=rf.some(x=>x==='yes');
+  DB.draftElig={id:uid('elig'),country:v('e_country'),age:Number(v('e_age')),sex:v('e_sex'),main_symptom:v('e_symptom'),symptom_duration:v('e_duration'),symptom_frequency:v('e_freq'),device_used:v('e_device'),known_heart_condition:v('e_known')==='yes',current_medications:v('e_meds'),symptom_description:v('e_desc'),red_flags:rf,eligible:!anyFlag,routing_tag:anyFlag?'NOT_ELIGIBLE_EMERGENCY_ADVICE':'ELIGIBLE_DIARY',created_at:nowISO()};
+  save();
+  if(anyFlag) go('not-suitable'); else go('payment');
+}
+function viewNotSuitable(){
+  app().innerHTML=`<div class="wrap narrow"><div class="card" style="border-color:#f1c7c4;background:#fff6f5">
+    <span class="pill danger">⚠ NOT_ELIGIBLE_EMERGENCY_ADVICE</span>
+    <h1 style="color:#7e1b16;margin-top:12px">${t('ns_h')}</h1>
+    <p>${t('ns_p')}</p>
+    <div class="note danger" style="margin:14px 0">${t('ns_emergency')}</div>
+    <p class="muted" style="font-size:.9rem">${t('limitation')}</p>
+    <button class="btn ghost" onclick="go('home')">${t('ns_back')}</button>
+  </div></div>`;
+}
+
+/* ----- Payment (slider, NO default) ----- */
+function viewPayment(){
+  if(!DB.draftElig||!DB.draftElig.eligible){ go('eligibility'); return; }
+  if(DB.monthlyUploads>=CFG.MONTHLY_CAP){ app().innerHTML=`<div class="wrap narrow"><div class="card"><div class="note warn">${t('payp_cap_full')}</div><button class="btn ghost" onclick="go('home')">${t('ns_back')}</button></div></div>`; return; }
+  app().innerHTML=`<div class="wrap narrow">
+    ${eligSteps(1)}
+    <div class="note good" style="margin-bottom:16px"><b>${t('res_h')}.</b> ${t('res_p')}</div>
+    <div class="card">
+      <h1 style="margin-bottom:4px">${t('payp_h')}</h1>
+      <p class="muted" style="margin-bottom:18px">${t('payp_sub')}</p>
+      <div id="amtDisplay" class="slider-amount empty">${t('payp_move')}</div>
+      <input type="range" id="amtRange" min="1" max="149" step="1" value="1" oninput="onSlider(this.value)" onchange="onSlider(this.value)">
+      <div class="slider-ends"><span>£1</span><span>£149</span></div>
+      <div class="amount-entry"><span class="muted" style="font-size:.85rem">${t('payp_or')}</span><span>£</span><input type="number" id="amtInput" min="1" max="149" step="1" placeholder="—" oninput="onInput(this.value)"></div>
+      <div class="note info" style="margin:18px 0"><b>${t('payp_buying_h')}.</b> ${t('payp_buying')}</div>
+      <div id="payErr"></div>
+      <button class="btn block lg" id="payBtn" disabled onclick="startPayment()">${t('payp_continue')}</button>
+    </div>
+  </div>`;
+  window._amount=null;
+}
+function setAmount(val){
+  const n=Math.round(Number(val));
+  if(!isFinite(n)||n<CFG.MIN||n>CFG.MAX){ window._amount=null; const d=document.getElementById('amtDisplay'); d.classList.add('empty'); d.textContent=t('payp_move'); document.getElementById('payBtn').disabled=true; return; }
+  window._amount=n; const d=document.getElementById('amtDisplay'); d.classList.remove('empty'); d.textContent=`${t('payp_selected')}: £${n}`; document.getElementById('payBtn').disabled=false; document.getElementById('payErr').innerHTML='';
+}
+function onSlider(v){ document.getElementById('amtInput').value=v; setAmount(v); }
+function onInput(v){ if(v===''){ setAmount(null); return; } const n=Math.round(Number(v)); if(isFinite(n)&&n>=1&&n<=149) document.getElementById('amtRange').value=n; setAmount(v); }
+function startPayment(){
+  const amt=window._amount;
+  if(!amt||amt<CFG.MIN||amt>CFG.MAX){ document.getElementById('payErr').innerHTML=`<div class="note danger" style="margin-bottom:12px">${t('err_amount')}</div>`; return; }
+  openModal(`<h2>${t('payp_buying_h')}</h2><p class="muted">${t('payp_selected')}: <b style="color:#0a4d59;font-size:1.2rem">£${amt}</b> GBP</p>
+    <div class="card" style="background:#fafcfb;margin:14px 0">
+      <div class="field"><label class="f">Card number</label><input type="text" value="4242 4242 4242 4242" readonly></div>
+      <div class="grid cols-2"><div class="field"><label class="f">Expiry</label><input type="text" value="12 / 34" readonly></div><div class="field"><label class="f">CVC</label><input type="text" value="123" readonly></div></div>
+      <p class="muted" style="font-size:.8rem;margin:0">Stripe test mode — no real charge. Amount is validated server-side in production (min 100p, max 14900p).</p>
+    </div>
+    <button class="btn block" id="confirmPay" onclick="confirmPayment(${amt})">${t('payp_pay_now')} — £${amt}</button>`);
+}
+function confirmPayment(amt){
+  const b=document.getElementById('confirmPay'); b.disabled=true; b.textContent=t('payp_processing');
+  setTimeout(()=>{
+    const start=nowISO();
+    const ep={id:uid('ep'),user_id:'me',eligibility:DB.draftElig,status:'ACTIVE_DIARY',payment_status:'paid',selected_amount_gbp:amt,stripe_payment_intent_id:'pi_test_'+Math.random().toString(36).slice(2,12),diary_start_at:start,diary_end_at:addDays(start,CFG.DIARY_DAYS),max_uploads:CFG.MAX_UPLOADS,uploads:[],report:null,escalated:false,red_flag:false,qa_assigned:false,created_at:start};
+    DB.episodes.unshift(ep); DB.currentEpisode=ep.id; DB.draftElig=null; save(); closeModal(); go('upload');
+  },900);
+}
+
+/* ----- Upload ----- */
+function activeEpisode(){ return DB.episodes.find(e=>e.id===DB.currentEpisode)||DB.episodes.find(e=>e.status==='ACTIVE_DIARY'&&e.user_id==='me'); }
+function viewUpload(){
+  const ep=activeEpisode(); if(!ep){ go('dashboard'); return; }
+  const used=ep.uploads.length; const full=used>=CFG.MAX_UPLOADS; const capFull=DB.monthlyUploads>=CFG.MONTHLY_CAP;
+  app().innerHTML=`<div class="wrap narrow">
+    ${eligSteps(2)}
+    <h1>${t('up_h')}</h1>
+    <div class="note info" style="margin-bottom:16px">${t('up_intro')}</div>
+    <div class="card" style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><strong>${t('up_used')}: ${used} / ${CFG.MAX_UPLOADS}</strong><span class="pill ${full?'warn':'good'}">${daysLeft(ep)} ${t('dash_days_left')}</span></div>
+      <div class="cap-bar"><i style="width:${used/CFG.MAX_UPLOADS*100}%"></i></div>
+    </div>
+    ${capFull?`<div class="note warn" style="margin-bottom:16px">${t('payp_cap_full')}</div>`:full?`<div class="note warn" style="margin-bottom:16px">${t('up_full')}</div>`:`<div class="card" style="margin-bottom:16px">
+      <div class="upload-drop" onclick="document.getElementById('ecgFile').click()"><div style="font-size:1.7rem">⬆</div><div id="fileLabel">${t('up_drop')}</div></div>
+      <input type="file" id="ecgFile" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt,.xml" onchange="onFilePick(this)">
+      <div class="grid cols-2" style="margin-top:14px">
+        <div class="field"><label class="f">${t('up_recorded')}</label><input type="datetime-local" id="u_recorded"></div>
+        <div class="field"><label class="f">${t('up_present')}</label><select id="u_present"><option value="">—</option><option value="yes">${t('yes')}</option><option value="no">${t('no')}</option></select></div>
+      </div>
+      <div class="field"><label class="f">${t('up_symtype')}</label><select id="u_symtype" onchange="checkUploadWarn(this.value)">
+        <option value="none">${t('st_none')}</option><option value="palpitations">${t('st_palp')}</option><option value="dizziness">${t('st_dizzy')}</option><option value="chest_discomfort">${t('st_chest')}</option><option value="breathlessness">${t('st_breath')}</option><option value="other">${t('st_other')}</option></select></div>
+      <div id="upWarn"></div>
+      <div class="field"><label class="f">${t('up_note')}</label><input type="text" id="u_note"></div>
+      <button class="btn block" id="addBtn" disabled onclick="addUpload()">${t('up_add')}</button>
+    </div>`}
+    <h3>${t('dash_submitted')}</h3>
+    <div class="card" style="margin-bottom:16px">${renderUploadList(ep)}</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn ghost" onclick="go('dashboard')">${t('nav_dash')}</button>
+      ${used>0?`<button class="btn" onclick="requestReport('${ep.id}')">${t('up_done')}</button>`:''}
+    </div>
+  </div>`;
+  window._pickedFile=null;
+}
+function onFilePick(input){
+  const f=input.files[0]; if(!f){ window._pickedFile=null; document.getElementById('addBtn').disabled=true; return; }
+  if(f.size>20*1024*1024){ document.getElementById('fileLabel').innerHTML=`<span style="color:#b3261e">File too large (max 20 MB)</span>`; window._pickedFile=null; document.getElementById('addBtn').disabled=true; return; }
+  window._pickedFile={name:f.name,type:f.type||f.name.split('.').pop(),size:f.size};
+  document.getElementById('fileLabel').innerHTML=`✓ <b>${esc(f.name)}</b> · ${(f.size/1024).toFixed(0)} KB`;
+  document.getElementById('addBtn').disabled=false;
+}
+function checkUploadWarn(val){ const w=document.getElementById('upWarn'); w.innerHTML=(val==='chest_discomfort'||val==='breathlessness')?`<div class="note danger" style="margin:10px 0">${t('up_chestwarn')}</div>`:''; }
+function addUpload(){
+  const ep=activeEpisode(); if(!ep) return;
+  if(ep.uploads.length>=CFG.MAX_UPLOADS){ alert(t('up_full')); return; }
+  if(DB.monthlyUploads>=CFG.MONTHLY_CAP){ alert(t('payp_cap_full')); return; }
+  if(!window._pickedFile) return;
+  const v=id=>document.getElementById(id).value; const sym=v('u_symtype'); const redFlag=(sym==='chest_discomfort'||sym==='breathlessness');
+  ep.uploads.push({id:uid('ecg'),file_name:window._pickedFile.name,file_type:window._pickedFile.type,file_size_bytes:window._pickedFile.size,recorded_at:v('u_recorded')||nowISO(),symptoms_present:v('u_present')==='yes',symptom_type:sym,patient_note:v('u_note'),signal_quality:null,clinician_classification:null,red_flag_during_upload:redFlag,reviewed_at:null,created_at:nowISO()});
+  if(redFlag) ep.red_flag=true;
+  DB.monthlyUploads=Math.min(CFG.MONTHLY_CAP,DB.monthlyUploads+1); save(); render();
+}
+function renderUploadList(ep){
+  if(!ep.uploads.length) return `<p class="muted" style="margin:0">—</p>`;
+  return ep.uploads.map((u,i)=>`<div class="list-row"><span class="badge-file">${(u.file_type||'').toString().split('/').pop().slice(0,4).toUpperCase()||'ECG'}</span><div style="flex:1"><div><b>#${i+1}</b> ${esc(u.file_name)}</div><div class="muted" style="font-size:.8rem">${fmtDateTime(u.recorded_at)} · ${symLabel(u.symptom_type)}</div></div>${u.red_flag_during_upload?`<span class="pill danger">⚑</span>`:''}${u.clinician_classification?`<span class="pill good">✓</span>`:`<span class="pill neutral">…</span>`}</div>`).join('');
+}
+function symLabel(s){ const m={none:t('st_none'),palpitations:t('st_palp'),dizziness:t('st_dizzy'),chest_discomfort:t('st_chest'),breathlessness:t('st_breath'),other:t('st_other')}; return m[s]||s||''; }
+function requestReport(epId){ const ep=DB.episodes.find(e=>e.id===epId); if(!ep) return; ep.status=ep.red_flag?'ESCALATED':'AWAITING_REVIEW'; ep.escalated=ep.red_flag; save(); go('dashboard'); }
+
+/* ----- Patient dashboard ----- */
+function viewDashboard(){
+  const mine=DB.episodes.filter(e=>e.user_id==='me');
+  if(!mine.length){ app().innerHTML=`<div class="wrap narrow"><div class="card"><h1>${t('dash_h')}</h1><p class="muted">${t('dash_none')}</p><button class="btn" onclick="go('eligibility')">${t('dash_start_new')}</button></div></div>`; return; }
+  app().innerHTML=`<div class="wrap"><h1>${t('dash_h')}</h1>${mine.map(ep=>epCard(ep)).join('')}<div style="margin-top:10px"><button class="btn ghost" onclick="go('eligibility')">${t('dash_start_new')}</button></div></div>`;
+}
+function epCard(ep){
+  const used=ep.uploads.length; const pillCls=ep.status==='ESCALATED'?'danger':(ep.status==='REPORT_READY'?'good':(ep.status==='ACTIVE_DIARY'?'':'neutral'));
+  return `<div class="card" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center"><span class="pill ${pillCls}">${t('st_'+ep.status)||ep.status}</span><span class="muted" style="font-size:.85rem">${gbp(ep.selected_amount_gbp)} · ${fmtDate(ep.created_at)}</span></div>
+    <div class="kv" style="margin:14px 0"><div class="muted">${t('dash_start')}</div><div>${fmtDate(ep.diary_start_at)}</div><div class="muted">${t('dash_end')}</div><div>${fmtDate(ep.diary_end_at)} <span class="muted">(${daysLeft(ep)} ${t('dash_days_left')})</span></div><div class="muted">${t('dash_uploads')}</div><div>${used} / ${CFG.MAX_UPLOADS}</div></div>
+    <div class="cap-bar" style="margin-bottom:14px"><i style="width:${used/CFG.MAX_UPLOADS*100}%"></i></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      ${ep.status==='ACTIVE_DIARY'&&used<CFG.MAX_UPLOADS?`<button class="btn sm" onclick="DB.currentEpisode='${ep.id}';save();go('upload')">${t('dash_addmore')}</button>`:''}
+      ${(ep.status==='REPORT_READY'||(ep.report&&ep.report.signed_at))?`<button class="btn sm" onclick="go('report','${ep.id}')">${t('dash_view_report')}</button>`:''}
+    </div>
+    ${ep.status==='ESCALATED'?`<div class="note danger" style="margin-top:12px">${t('ns_emergency')}</div>`:''}
+    ${(ep.status==='AWAITING_REVIEW'||ep.status==='IN_REVIEW')?`<div class="note info" style="margin-top:12px">${t('rep_notready')}</div>`:''}
+  </div>`;
+}
+
+/* ----- Patient report ----- */
+function viewReport(param){
+  const ep=DB.episodes.find(e=>e.id===param)||DB.episodes.find(e=>e.report&&e.report.signed_at);
+  if(!ep||!ep.report||!ep.report.signed_at){ app().innerHTML=`<div class="wrap narrow"><div class="card"><h1>${t('rep_h')}</h1><div class="note info">${t('rep_notready')}</div><button class="btn ghost" onclick="go('dashboard')">${t('nav_dash')}</button></div></div>`; return; }
+  app().innerHTML=`<div class="wrap narrow">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"><button class="btn" onclick="downloadReport('${ep.id}')">⬇ ${t('rep_download')}</button><button class="btn ghost" onclick="go('dashboard')">${t('nav_dash')}</button></div>
+    ${reportHTML(ep)}
+    <div class="card" style="margin-top:16px"><h3>${t('rep_share_h')}</h3><p class="muted">${t('rep_share_p')}</p><button class="btn ghost" onclick="shareWA()">🟢 ${t('rep_share_btn')}</button></div>
+  </div>`;
+}
+function reportHTML(ep){
+  const r=ep.report,el=ep.eligibility||{};
+  return `<div class="report-doc" id="reportDoc">
+    <h3>${t('rep_h')}</h3>
+    <div class="kv"><div class="muted">${t('f_age')}</div><div>${el.age||'—'}</div><div class="muted">${t('f_sex')}</div><div>${el.sex||'—'}</div><div class="muted">${t('f_country')}</div><div>${cName(el.country)||'—'}</div><div class="muted">${t('dash_start')} → ${t('dash_end')}</div><div>${fmtDate(ep.diary_start_at)} → ${fmtDate(ep.diary_end_at)}</div><div class="muted">${t('adm_ecgs_h')}</div><div>${r.number_of_ecgs_reviewed}</div></div>
+    <h4>${t('adm_rhythm')}</h4><p>${esc(r.rhythm_summary)||'—'}</p>
+    <h4>${t('adm_sigsum')}</h4><p>${esc(r.signal_quality_summary)||'—'}</p>
+    <h4>${t('adm_symcorr')}</h4><p>${esc(r.symptom_correlation)||'—'}</p>
+    <h4>${t('adm_comment')}</h4><p>${esc(r.clinician_comment)||'—'}</p>
+    <h4>${t('adm_recommend')}</h4><p><span class="pill">${RECO_OPTS[r.recommendation]?RECO_OPTS[r.recommendation][lang]:r.recommendation}</span></p>
+    <h4 style="color:#7a3d00">${t('safety_h')}</h4><p class="muted">${lang==='ar'?'هذه الخدمة ليست خدمة طوارئ. إذا ظهر لديك ألم في الصدر أو إغماء أو ضيق تنفّس شديد أو أعراض شبيهة بالسكتة أو شعرت بتوعّك خطير، اطلب الرعاية الطبية العاجلة محلياً.':'This service is not an emergency service. If you develop chest pain, fainting, severe breathlessness, stroke-like symptoms, or feel seriously unwell, seek urgent local medical care.'}</p>
+    <h4>${lang==='ar'?'القيود':'Limitations'}</h4><p class="muted">${t('limitation')}</p>
+    <div style="border-top:1px solid var(--line2);margin-top:18px;padding-top:12px" class="kv"><div class="muted">${t('adm_signer')}</div><div>${esc(r.signed_by_name||'Dr M. (demo clinician)')}</div><div class="muted">${lang==='ar'?'التاريخ':'Date'}</div><div>${fmtDate(r.signed_at)}</div></div>
+  </div>`;
+}
+function downloadReport(epId){
+  const ep=DB.episodes.find(e=>e.id===epId); if(!ep) return;
+  const w=window.open('','_blank');
+  w.document.write(`<html dir="${I18N[lang].dir}" lang="${lang}"><head><meta charset="utf-8"><title>ECG Diary Summary</title><style>body{font-family:system-ui,Arial,sans-serif;max-width:720px;margin:30px auto;padding:0 20px;color:#16282f;line-height:1.55}h3{border-bottom:2px solid #0f6f80;padding-bottom:6px}h4{margin:16px 0 4px}.kv{display:grid;grid-template-columns:180px 1fr;gap:3px 12px}.muted{color:#5e727b}.pill{background:#e6f1f2;color:#0a4d59;padding:2px 10px;border-radius:99px;font-size:13px}</style></head><body>${reportHTML(ep)}<p style="margin-top:30px;color:#999;font-size:12px">Generated by Gulf ECG Diary (demo). Use your browser's Print → Save as PDF.</p><script>window.onload=function(){setTimeout(function(){window.print()},250)}<\/script></body></html>`);
+  w.document.close();
+}
+function shareWA(){
+  const txt=lang==='ar'?'استخدمت خدمة مراجعة تخطيط القلب من قِبل طبيب لتخطيطات القلب أحادية الاشتقاق. يمكنك اختيار المبلغ من 1 إلى 149 جنيهاً إسترلينياً. الخدمة مخصصة للحالات غير الطارئة فقط.':'I used this clinician-reviewed ECG diary service for single-lead ECGs. You can choose what to pay from £1 to £149. It is for non-emergency rhythm concerns only.';
+  window.open('https://wa.me/?text='+encodeURIComponent(txt+' '+location.origin+location.pathname),'_blank');
+}
+
+/* ============================================================ ADMIN ============================================================ */
+function viewAdmin(param){
+  if(!DB.adminAuthed) return viewAdminLogin();
+  if(param) return viewAdminEpisode(param);
+  const all=DB.episodes, month=monthMetrics();
+  app().innerHTML=`<div class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px"><h1 style="margin:0">${t('adm_h')}</h1><div style="display:flex;gap:8px"><button class="btn sm ghost" onclick="seedDemo()">${t('adm_seed')}</button><button class="btn sm ghost" onclick="DB.adminAuthed=false;save();go('home')">Sign out</button></div></div>
+    <div class="grid cols-4" style="margin:18px 0">
+      ${statCard(t('adm_month_uploads'),`${DB.monthlyUploads} / ${CFG.MONTHLY_CAP}`,`<div class="cap-bar"><i style="width:${DB.monthlyUploads/CFG.MONTHLY_CAP*100}%"></i></div>`)}
+      ${statCard(t('adm_remaining'),`${CFG.MONTHLY_CAP-DB.monthlyUploads}`)}
+      ${statCard(t('adm_revenue'),`£${month.revenue}`)}
+      ${statCard(t('adm_active'),`${month.active}`)}
+      ${statCard(t('adm_awaiting'),`${month.awaiting}`)}
+      ${statCard(t('adm_escal'),`${month.escalated}`,month.escalated?`<span class="pill danger">urgent</span>`:'')}
+      ${statCard(t('adm_avg_pay'),`£${month.avgPay}`)}
+      ${statCard(t('adm_rev_up'),`£${month.revPerUpload}`)}
+      ${statCard(t('adm_avg_up'),`${month.avgUploads}`)}
+      ${statCard(t('adm_reports'),`${month.reports}`)}
+      ${statCard(t('adm_qa'),`${month.qa}`)}
+    </div>
+    <h2>${t('adm_queue')}</h2>
+    <div class="toolbar"><div class="seg" id="admFilter">${[['all','filter_all'],['awaiting','filter_awaiting'],['urgent','filter_urgent'],['done','filter_done']].map(([k,lab],i)=>`<button class="${i===0?'on':''}" onclick="setAdmFilter('${k}',this)">${t(lab)}</button>`).join('')}</div></div>
+    <div class="table-wrap"><table id="queueTable"><thead><tr><th>${t('col_id')}</th><th>${t('col_country')}</th><th>${t('col_agesex')}</th><th>${t('col_amount')}</th><th>${t('col_ecgs')}</th><th>${t('col_status')}</th><th>${t('col_flag')}</th><th>${t('col_left')}</th><th>${t('col_action')}</th></tr></thead><tbody>${queueRows(all)}</tbody></table></div>
+    ${all.length?'':`<p class="muted" style="margin-top:14px">${t('adm_no_episodes')}</p>`}
+  </div>`;
+}
+function statCard(label,val,extra){ return `<div class="card stat"><div class="v">${val}</div><div class="l">${label}</div>${extra||''}</div>`; }
+function monthMetrics(){
+  const all=DB.episodes, paid=all.filter(e=>e.payment_status==='paid');
+  const revenue=paid.reduce((s,e)=>s+Number(e.selected_amount_gbp||0),0);
+  const totalUploads=all.reduce((s,e)=>s+e.uploads.length,0);
+  return {revenue,active:all.filter(e=>e.status==='ACTIVE_DIARY').length,awaiting:all.filter(e=>['AWAITING_REVIEW','IN_REVIEW'].includes(e.status)).length,escalated:all.filter(e=>e.status==='ESCALATED'||e.escalated).length,avgPay:paid.length?(revenue/paid.length).toFixed(0):0,revPerUpload:totalUploads?(revenue/totalUploads).toFixed(1):0,avgUploads:all.length?(totalUploads/all.length).toFixed(1):0,reports:all.filter(e=>e.report&&e.report.signed_at).length,qa:all.filter(e=>e.qa_assigned).length};
+}
+function queueRows(list){
+  if(!list.length) return '';
+  return list.map(ep=>{ const el=ep.eligibility||{}; const flag=(ep.escalated||ep.red_flag)?`<span class="pill danger">⚑</span>`:(ep.qa_assigned?`<span class="pill warn">QA</span>`:`<span class="pill neutral">—</span>`);
+    return `<tr><td>${ep.id.slice(-6)}</td><td>${cName(el.country)}</td><td>${el.age||'—'} / ${(el.sex||'').slice(0,1).toUpperCase()}</td><td>£${ep.selected_amount_gbp}</td><td>${ep.uploads.length}</td><td><span class="pill ${ep.status==='ESCALATED'?'danger':(ep.status==='REPORT_READY'?'good':'neutral')}">${t('st_'+ep.status)||ep.status}</span></td><td>${flag}</td><td>${daysLeft(ep)}</td><td><button class="btn sm" onclick="go('admin','${ep.id}')">${t('adm_open')}</button></td></tr>`;
+  }).join('');
+}
+function setAdmFilter(k,btn){
+  document.querySelectorAll('#admFilter button').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+  let list=DB.episodes;
+  if(k==='awaiting') list=list.filter(e=>['AWAITING_REVIEW','IN_REVIEW'].includes(e.status));
+  if(k==='urgent') list=list.filter(e=>e.status==='ESCALATED'||e.escalated);
+  if(k==='done') list=list.filter(e=>e.report&&e.report.signed_at);
+  document.querySelector('#queueTable tbody').innerHTML=queueRows(list);
+}
+function viewAdminLogin(){
+  app().innerHTML=`<div class="wrap narrow" style="max-width:440px"><div class="card"><h1>${t('adm_login_h')}</h1><p class="muted">${t('adm_login_p')}</p><div class="field"><label class="f">Email</label><input type="email" id="adm_email" value="clinician@demo.local"></div><div class="field"><label class="f">Role</label><select id="adm_role"><option value="clinician">clinician</option><option value="admin">admin</option><option value="physiologist">physiologist</option></select></div><button class="btn block" onclick="DB.adminAuthed=true;DB.adminRole=document.getElementById('adm_role').value;save();render()">${t('adm_enter')}</button></div></div>`;
+}
+function viewAdminEpisode(epId){
+  const ep=DB.episodes.find(e=>e.id===epId); if(!ep){ go('admin'); return; }
+  const el=ep.eligibility||{}, r=ep.report||{};
+  app().innerHTML=`<div class="wrap">
+    <button class="btn sm ghost" onclick="go('admin')">← ${t('adm_back')}</button>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px"><h1 style="margin:0">${ep.id.slice(-6)}</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill ${ep.status==='ESCALATED'?'danger':'neutral'}">${t('st_'+ep.status)||ep.status}</span>${ep.red_flag?`<span class="pill danger">⚑ red-flag upload</span>`:''}</div></div>
+    <div class="grid cols-2" style="margin:16px 0">
+      <div class="card"><h3>${t('elig_h')}</h3><div class="kv"><div class="muted">${t('f_country')}</div><div>${cName(el.country)}</div><div class="muted">${t('f_age')} / ${t('f_sex')}</div><div>${el.age} / ${el.sex}</div><div class="muted">${t('f_symptom')}</div><div>${el.main_symptom}</div><div class="muted">${t('f_duration')}</div><div>${el.symptom_duration||'—'}</div><div class="muted">${t('f_freq')}</div><div>${el.symptom_frequency||'—'}</div><div class="muted">${t('f_device')}</div><div>${el.device_used||'—'}</div><div class="muted">${t('f_known')}</div><div>${el.known_heart_condition?t('yes'):t('no')}</div><div class="muted">${t('f_meds')}</div><div>${esc(el.current_medications)||'—'}</div></div>${el.symptom_description?`<p class="muted" style="margin-top:10px"><b>${t('f_desc')}:</b> ${esc(el.symptom_description)}</p>`:''}</div>
+      <div class="card"><h3>${t('payp_buying_h')}</h3><div class="kv"><div class="muted">${t('payp_selected')}</div><div>£${ep.selected_amount_gbp}</div><div class="muted">${t('dash_start')}</div><div>${fmtDate(ep.diary_start_at)}</div><div class="muted">${t('dash_end')}</div><div>${fmtDate(ep.diary_end_at)}</div><div class="muted">${t('dash_uploads')}</div><div>${ep.uploads.length} / ${CFG.MAX_UPLOADS}</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn sm danger" onclick="escalate('${ep.id}')">${t('adm_escal_btn')}</button><button class="btn sm ghost" onclick="assignQA('${ep.id}')">${t('adm_assign_qa')}</button></div>${ep.qa_assigned?`<div class="note warn" style="margin-top:10px">QA: ${qaLabel(ep.qa_type)} — physiologist review queued.</div>`:''}</div>
+    </div>
+    <h2>${t('adm_ecgs_h')} (${ep.uploads.length})</h2>
+    <div class="card" style="margin-bottom:18px">${ep.uploads.length?ep.uploads.map((u,i)=>ecgRow(ep,u,i)).join(''):`<p class="muted" style="margin:0">—</p>`}</div>
+    <h2>${t('adm_build_h')}</h2>
+    <div class="card">
+      <div class="field"><label class="f">${t('adm_rhythm')}</label><textarea id="r_rhythm">${esc(r.rhythm_summary||'')}</textarea></div>
+      <div class="field"><label class="f">${t('adm_sigsum')}</label><input type="text" id="r_sig" value="${esc(r.signal_quality_summary||'')}"></div>
+      <div class="field"><label class="f">${t('adm_symcorr')}</label><textarea id="r_sym">${esc(r.symptom_correlation||'')}</textarea></div>
+      <div class="field"><label class="f">${t('adm_comment')}</label><textarea id="r_comment">${esc(r.clinician_comment||'')}</textarea></div>
+      <div class="field"><label class="f">${t('adm_recommend')}</label><select id="r_reco">${Object.keys(RECO_OPTS).map(k=>`<option value="${k}" ${r.recommendation===k?'selected':''}>${RECO_OPTS[k][lang]}</option>`).join('')}</select></div>
+      <div class="field"><label class="f">${t('adm_signer')}</label><input type="text" id="r_signer" value="${esc(r.signed_by_name||'Dr M. (demo clinician)')}"></div>
+      <div id="signMsg"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" onclick="saveReport('${ep.id}',false)">Save draft</button><button class="btn" onclick="saveReport('${ep.id}',true)">${t('adm_sign')}</button></div>
+    </div>
+  </div>`;
+}
+function ecgRow(ep,u,i){
+  return `<div class="list-row" style="align-items:flex-start;flex-wrap:wrap"><span class="badge-file">${(u.file_type||'ECG').toString().split('/').pop().slice(0,4).toUpperCase()}</span>
+    <div style="flex:1;min-width:200px"><div><b>#${i+1}</b> ${esc(u.file_name)} ${u.red_flag_during_upload?'<span class="pill danger">⚑</span>':''}</div><div class="muted" style="font-size:.8rem">${fmtDateTime(u.recorded_at)} · ${u.symptoms_present?'symptomatic':'asymptomatic'} · ${symLabel(u.symptom_type)}</div>${u.patient_note?`<div class="muted" style="font-size:.82rem">📝 ${esc(u.patient_note)}</div>`:''}${ecgSVG()}</div>
+    <div style="display:flex;flex-direction:column;gap:6px;min-width:175px"><select onchange="classify('${ep.id}','${u.id}','class',this.value)" style="font-size:.82rem;padding:6px 8px"><option value="">${t('adm_classify')}…</option>${Object.keys(CLASS_OPTS).map(k=>`<option value="${k}" ${u.clinician_classification===k?'selected':''}>${CLASS_OPTS[k][lang]}</option>`).join('')}</select><select onchange="classify('${ep.id}','${u.id}','qual',this.value)" style="font-size:.82rem;padding:6px 8px"><option value="">${t('adm_quality')}…</option>${Object.keys(QUAL_OPTS).map(k=>`<option value="${k}" ${u.signal_quality===k?'selected':''}>${QUAL_OPTS[k][lang]}</option>`).join('')}</select></div></div>`;
+}
+function classify(epId,uId,which,val){ const ep=DB.episodes.find(e=>e.id===epId); if(!ep)return; const u=ep.uploads.find(x=>x.id===uId); if(!u)return; if(which==='class')u.clinician_classification=val||null; else u.signal_quality=val||null; u.reviewed_at=nowISO(); if(ep.status==='AWAITING_REVIEW')ep.status='IN_REVIEW'; save(); }
+function escalate(epId){ const ep=DB.episodes.find(e=>e.id===epId); if(!ep)return; ep.status='ESCALATED'; ep.escalated=true; save(); render(); }
+function assignQA(epId){ const ep=DB.episodes.find(e=>e.id===epId); if(!ep)return; ep.qa_assigned=true; ep.qa_type=ep.escalated?'ESCALATION':'RANDOM_10_PERCENT'; save(); render(); }
+function qaLabel(x){ return {RANDOM_10_PERCENT:'Random 10% sample',ESCALATION:'Escalation review',TECHNICAL_REVIEW:'Technical review'}[x]||x; }
+function saveReport(epId,sign){
+  const ep=DB.episodes.find(e=>e.id===epId); if(!ep)return; const v=id=>document.getElementById(id).value; ep.report=ep.report||{};
+  Object.assign(ep.report,{number_of_ecgs_reviewed:ep.uploads.length,rhythm_summary:v('r_rhythm'),signal_quality_summary:v('r_sig'),symptom_correlation:v('r_sym'),clinician_comment:v('r_comment'),recommendation:v('r_reco'),signed_by_name:v('r_signer'),limitations_statement:t('limitation')});
+  if(sign){ ep.report.signed_at=nowISO(); ep.status='REPORT_READY'; document.getElementById('signMsg').innerHTML=`<div class="note good" style="margin-bottom:12px">${t('adm_signed')}</div>`; }
+  save(); if(sign) setTimeout(()=>render(),700);
+}
+function seedDemo(){
+  const samples=[{country:'UAE',age:54,sex:'male',sym:'palpitations',amt:35,n:6,flag:false},{country:'Saudi Arabia',age:39,sex:'female',sym:'irregular_heartbeat',amt:80,n:14,flag:false},{country:'Qatar',age:67,sex:'male',sym:'wearable_alert',amt:120,n:3,flag:true},{country:'Kuwait',age:28,sex:'female',sym:'palpitations',amt:5,n:9,flag:false}];
+  samples.forEach((s,idx)=>{
+    const start=addDays(nowISO(),-(idx+1)); const uploads=[];
+    for(let i=0;i<s.n;i++){ const isFlag=s.flag&&i===1; uploads.push({id:uid('ecg'),file_name:`ecg_${i+1}.pdf`,file_type:'pdf',file_size_bytes:240000,recorded_at:addDays(start,i*0.3),symptoms_present:i%2===0,symptom_type:isFlag?'chest_discomfort':(i%2===0?'palpitations':'none'),patient_note:i===0?'felt fluttering after coffee':'',signal_quality:null,clinician_classification:null,red_flag_during_upload:isFlag,reviewed_at:null,created_at:start}); }
+    DB.episodes.push({id:uid('ep'),user_id:'demo',eligibility:{id:uid('elig'),country:s.country,age:s.age,sex:s.sex,main_symptom:s.sym,symptom_duration:'weeks',symptom_frequency:'intermittent',device_used:'KardiaMobile',known_heart_condition:false,current_medications:'',symptom_description:'',red_flags:Array(8).fill('no'),eligible:true,routing_tag:'ELIGIBLE_DIARY',created_at:start},status:s.flag?'ESCALATED':'AWAITING_REVIEW',payment_status:'paid',selected_amount_gbp:s.amt,stripe_payment_intent_id:'pi_demo_'+idx,diary_start_at:start,diary_end_at:addDays(start,CFG.DIARY_DAYS),max_uploads:CFG.MAX_UPLOADS,uploads,report:null,escalated:s.flag,red_flag:s.flag,qa_assigned:false,created_at:start});
+    DB.monthlyUploads+=s.n;
+  });
+  DB.monthlyUploads=Math.min(DB.monthlyUploads,CFG.MONTHLY_CAP); save(); render();
+}
+
+/* ----- Legal ----- */
+function viewLegal(kind){
+  const C=lang==='ar'?{terms:['شروط الخدمة','تحكم هذه الشروط استخدامك لخدمة Gulf ECG Diary. الخدمة تقدّم مراجعة عن بُعد لتخطيطات القلب أحادية الاشتقاق وهي ليست خدمة طوارئ.'],privacy:['سياسة الخصوصية','نتعامل مع بياناتك الصحية بسرية. لا تُتاح ملفات التخطيط للعامة وتتطلب تسجيل الدخول.'],disclaimer:['إخلاء المسؤولية الطبية',t('limitation')+' '+t('foot_disc')],refund:['سياسة الاسترداد','إذا لم تبدأ مراجعة الطبيب، يمكن طلب استرداد المبلغ. بعد بدء المراجعة السريرية أو إصدار التقرير، يكون الاسترداد تقديرياً.'],contact:['اتصل بنا','هذه نسخة تجريبية. ستُضاف تفاصيل التواصل قبل الإطلاق.']}
+    :{terms:['Terms of Service','These terms govern your use of Gulf ECG Diary. The service provides remote review of single-lead ECG recordings and is not an emergency service.'],privacy:['Privacy Policy','We handle your health data confidentially. ECG files are never publicly accessible and require login. Patient reports require authentication.'],disclaimer:['Medical Disclaimer',t('limitation')+' '+t('foot_disc')],refund:['Refund Policy','If no clinician review has started, a refund may be requested. Once clinical review has begun or a report has been issued, refunds are discretionary.'],contact:['Contact','This is a demo prototype. Contact details will be added before launch.']};
+  const [h,body]=C[kind]||C.terms;
+  app().innerHTML=`<div class="wrap narrow"><h1>${h}</h1><div class="card"><p style="margin:0">${body}</p></div><div class="note warn" style="margin-top:14px">${lang==='ar'?'يجب مراجعة الصياغة القانونية النهائية قبل الإطلاق.':'Final legal wording must be reviewed before launch.'}</div></div>`;
+}
+
+/* ----- Modal ----- */
+function openModal(html){ document.getElementById('modalRoot').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()"><div class="modal">${html}<div style="text-align:end;margin-top:10px"><button class="btn sm ghost" onclick="closeModal()">✕</button></div></div></div>`; }
+function closeModal(){ document.getElementById('modalRoot').innerHTML=''; }
+</script>
+</body>
+</html>
