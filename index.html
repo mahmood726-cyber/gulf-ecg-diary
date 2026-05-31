@@ -13,6 +13,9 @@
   @font-face{font-family:'Cairo';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/cairo-arabic-400.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
   @font-face{font-family:'Cairo';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/cairo-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
   @font-face{font-family:'Cairo';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/cairo-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
+  /* Self-hosted Latin serif — Source Serif 4 (SIL OFL 1.1, see fonts/SourceSerif4-OFL.txt). */
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/source-serif-4-latin-400.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
+  @font-face{font-family:'Source Serif 4';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/source-serif-4-latin-600.woff2') format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215}
   :root{
     --bg:#f6f4ef; --surface:#ffffff; --ink:#16282f; --muted:#4d616a;
     --line:#e6e0d4; --line2:#e3ebee;
@@ -26,7 +29,7 @@
     --shadow:0 1px 2px rgba(18,48,61,.05),0 10px 34px rgba(18,48,61,.07);
     --shadow-sm:0 1px 2px rgba(18,48,61,.06),0 4px 14px rgba(18,48,61,.05);
     --maxw:1120px;
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --serif:"Source Serif 4","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
     --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box}
@@ -231,6 +234,41 @@
   @keyframes breathe{0%,100%{transform:scale(.78)}40%{transform:scale(1)}60%{transform:scale(1)}}
   .clin-avatar{width:84px;height:84px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.9rem;font-weight:600;color:#fff;background:linear-gradient(150deg,#0f6f80,#0a4d59);box-shadow:var(--shadow-sm);letter-spacing:.02em}
   @media (prefers-reduced-motion: reduce){.breath-ring{animation:none}}
+
+  /* ---------- Dark theme (token + scoped overrides; light CSS untouched) ---------- */
+  .caution-card{border-color:#eedcbf;background:#fffaf2}
+  html[data-theme=dark]{
+    --bg:#0e1c24; --surface:#15252e; --surface-2:#1b2d36; --ink:#e8eff2; --muted:#92a6ae;
+    --line:#2a3f48; --line2:#26363f;
+    --brand:#3aa7ba; --brand-dk:#7ed4e2; --brand-soft:#16323b;
+    --sage:#62b58c; --sage-soft:#15302a; --gold:#d8b266; --gold-soft:#2b2415; --navy:#0a141b;
+    --good:#54c08a; --good-soft:#143026; --warn:#e2a85f; --warn-soft:#2e2615; --danger:#ef7268; --danger-soft:#33201f;
+    --ink-soft:#b3c4cb;
+  }
+  html[data-theme=dark] .note,
+  html[data-theme=dark] .hero-card,
+  html[data-theme=dark] .band.alt,
+  html[data-theme=dark] .langbtn,
+  html[data-theme=dark] .btn.ghost,
+  html[data-theme=dark] input[type=text],html[data-theme=dark] input[type=number],
+  html[data-theme=dark] input[type=email],html[data-theme=dark] input[type=date],
+  html[data-theme=dark] input[type=datetime-local],html[data-theme=dark] select,html[data-theme=dark] textarea,
+  html[data-theme=dark] .yn label,
+  html[data-theme=dark] .seg,html[data-theme=dark] .seg button,
+  html[data-theme=dark] .accordion,html[data-theme=dark] .accordion>button,
+  html[data-theme=dark] .modal,html[data-theme=dark] .report-doc,
+  html[data-theme=dark] .table-wrap,html[data-theme=dark] .redflag-q,html[data-theme=dark] .step{background:var(--surface)}
+  html[data-theme=dark] .upload-drop,html[data-theme=dark] tr:hover td{background:var(--surface-2)}
+  html[data-theme=dark] .hero,html[data-theme=dark] .band.tint{background:linear-gradient(180deg,#142a33,var(--bg))}
+  html[data-theme=dark] header.site{background:rgba(14,28,36,.88)}
+  html[data-theme=dark] .lead,html[data-theme=dark] .hero .sub,html[data-theme=dark] .edu-body,html[data-theme=dark] .navlink{color:var(--ink-soft)}
+  html[data-theme=dark] .accordion>div,html[data-theme=dark] .anchor-nav a{color:var(--muted)}
+  html[data-theme=dark] .note.good{color:var(--good)} html[data-theme=dark] .note.warn{color:var(--warn)} html[data-theme=dark] .note.danger{color:var(--danger)}
+  html[data-theme=dark] .evidence{color:#e3c281} html[data-theme=dark] .evidence b{color:#f2dcad}
+  html[data-theme=dark] .pill.neutral{background:#22323a} html[data-theme=dark] .cap-bar{background:#22323a}
+  html[data-theme=dark] .jdot{border-color:#27505a}
+  html[data-theme=dark] .caution-card{border-color:#3a2e16;background:#241d10}
+  html[data-theme=dark] .breath-ring{background:radial-gradient(circle,var(--brand-soft),var(--surface))}
 </style>
 </head>
 <body>
@@ -246,6 +284,7 @@
     </div>
     <div class="spacer"></div>
     <nav id="topnav" class="topnav"></nav>
+    <button class="langbtn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark mode" style="padding:7px 10px;display:flex;align-items:center"></button>
     <button class="langbtn" id="langToggle" onclick="toggleLang()"></button>
     <button class="menubtn" onclick="toggleMobileNav()">☰</button>
   </div>
@@ -749,6 +788,7 @@ const ICONS={
  share:'<path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13M8 7l4-4 4 4"/>',
  download:'<path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/>',
  flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/>',
 };
 const EMOJI2ICON={'🫀':'heart','☕':'cup','🔁':'loop','🌬️':'wind','🆘':'life','🧊':'snow','😴':'moon','🍷':'glass','🏃':'trending','💊':'pill','📱':'phone','📈':'activity','📖':'book'};
 function ico(name,size){ return `<svg class="ico" width="${size||24}" height="${size||24}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name]||ICONS.activity}</svg>`; }
@@ -770,7 +810,17 @@ function breathBlock(l){
 function go(route,param){ location.hash='#/'+route+(param?('/'+param):''); }
 function currentRoute(){ const h=location.hash.replace(/^#\/?/,''); const p=h.split('/').filter(Boolean); return {route:p[0]||'home',param:p[1]||null}; }
 window.addEventListener('hashchange',()=>{closeMobileNav();render();});
-window.addEventListener('load',()=>{applyLang();render();});
+window.addEventListener('load',()=>{applyTheme();applyLang();render();});
+function applyTheme(){
+  const sys=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+  const th=DB.theme||sys;
+  document.documentElement.setAttribute('data-theme',th);
+  const b=document.getElementById('themeToggle'); if(b) b.innerHTML=ico(th==='dark'?'sun':'moon',16);
+}
+function toggleTheme(){
+  const cur=document.documentElement.getAttribute('data-theme')||'light';
+  DB.theme=cur==='dark'?'light':'dark'; save(); applyTheme();
+}
 
 /* ---------- Language / nav ---------- */
 function applyLang(){
@@ -889,7 +939,7 @@ function viewHome(){
           <h3>${t('forwho_h')}</h3>
           <ul class="clean ticklist muted">${m.forwho.map(x=>`<li><span style="color:var(--sage)">${ico('check',18)}</span><span>${x}</span></li>`).join('')}</ul>
         </div>
-        <div class="card" style="border-color:#eedcbf;background:#fffaf2">
+        <div class="card caution-card">
           <h3 style="color:#7a3d00">${t('notfor_h')}</h3>
           <ul class="clean ticklist" style="color:#7a3d00">${m.notfor.map(x=>`<li><span style="color:var(--warn)">${ico('x',18)}</span><span>${x}</span></li>`).join('')}</ul>
         </div>
