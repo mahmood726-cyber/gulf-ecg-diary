@@ -9,6 +9,10 @@
 <meta property="og:description" content="Clinician-reviewed single-lead ECG diary for palpitations. Learn what your heart is doing, then choose what to pay — SAR 1 to SAR 149." />
 <meta property="og:type" content="website" />
 <style>
+  /* Self-hosted Arabic webfont — Cairo (SIL OFL 1.1, see fonts/Cairo-OFL.txt). Arabic range only. */
+  @font-face{font-family:'Cairo';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/cairo-arabic-400.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
+  @font-face{font-family:'Cairo';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/cairo-arabic-600.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
+  @font-face{font-family:'Cairo';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/cairo-arabic-700.woff2') format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+0660-0669}
   :root{
     --bg:#f6f4ef; --surface:#ffffff; --ink:#16282f; --muted:#4d616a;
     --line:#e6e0d4; --line2:#e3ebee;
@@ -28,11 +32,11 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{font-family:var(--sans);font-size:17px;background:var(--bg);color:var(--ink);line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  html[dir=rtl] body{font-family:"Noto Naskh Arabic","Noto Sans Arabic","Geeza Pro","Segoe UI",Tahoma,system-ui,sans-serif}
+  html[dir=rtl] body{font-family:"Cairo","Noto Naskh Arabic","Noto Sans Arabic","Geeza Pro","Segoe UI",Tahoma,system-ui,sans-serif}
   a{color:var(--brand-dk);text-decoration:none}
   a:hover{text-decoration:underline}
   h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);margin:0 0 .5em;font-weight:600;letter-spacing:-.01em}
-  html[dir=rtl] h1,html[dir=rtl] h2,html[dir=rtl] h3,html[dir=rtl] h4{font-family:"Noto Kufi Arabic","Noto Sans Arabic","Geeza Pro","Segoe UI",Tahoma,sans-serif}
+  html[dir=rtl] h1,html[dir=rtl] h2,html[dir=rtl] h3,html[dir=rtl] h4{font-family:"Cairo","Noto Kufi Arabic","Noto Sans Arabic","Geeza Pro","Segoe UI",Tahoma,sans-serif}
   h1{font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.15}
   h2{font-size:clamp(1.35rem,3.2vw,2rem);line-height:1.2}
   h3{font-size:1.18rem}
@@ -191,6 +195,9 @@
   .badge-file{width:36px;height:36px;border-radius:9px;background:var(--brand-soft);color:var(--brand-dk);display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex:0 0 auto}
   ul.clean{padding-inline-start:20px;margin:0 0 1em}
   ul.clean li{margin-bottom:7px}
+  ul.ticklist{list-style:none;padding-inline-start:0}
+  ul.ticklist li{display:flex;gap:9px;align-items:flex-start;margin-bottom:9px}
+  ul.ticklist li .ico{margin-top:2px}
   .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
   .seg{display:inline-flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden;background:#fff}
   .seg button{border:0;background:#fff;padding:8px 13px;font:inherit;font-size:.85rem;cursor:pointer;color:var(--muted)}
@@ -737,6 +744,11 @@ const ICONS={
  search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.2-4.2"/>',
  alert:'<path d="M12 3 2 20h20L12 3Z"/><path d="M12 9.5v4.5M12 17v.5"/>',
  upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/>',
+ check:'<path d="M4 12.5l5 5 11-11"/>',
+ x:'<path d="M6 6l12 12M18 6 6 18"/>',
+ share:'<path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 3v13M8 7l4-4 4 4"/>',
+ download:'<path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/>',
+ flag:'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
 };
 const EMOJI2ICON={'🫀':'heart','☕':'cup','🔁':'loop','🌬️':'wind','🆘':'life','🧊':'snow','😴':'moon','🍷':'glass','🏃':'trending','💊':'pill','📱':'phone','📈':'activity','📖':'book'};
 function ico(name,size){ return `<svg class="ico" width="${size||24}" height="${size||24}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name]||ICONS.activity}</svg>`; }
@@ -875,11 +887,11 @@ function viewHome(){
       <div class="grid cols-2">
         <div class="card">
           <h3>${t('forwho_h')}</h3>
-          <ul class="clean muted">${m.forwho.map(x=>`<li>✓ ${x}</li>`).join('')}</ul>
+          <ul class="clean ticklist muted">${m.forwho.map(x=>`<li><span style="color:var(--sage)">${ico('check',18)}</span><span>${x}</span></li>`).join('')}</ul>
         </div>
         <div class="card" style="border-color:#eedcbf;background:#fffaf2">
           <h3 style="color:#7a3d00">${t('notfor_h')}</h3>
-          <ul class="clean" style="color:#7a3d00">${m.notfor.map(x=>`<li>✕ ${x}</li>`).join('')}</ul>
+          <ul class="clean ticklist" style="color:#7a3d00">${m.notfor.map(x=>`<li><span style="color:var(--warn)">${ico('x',18)}</span><span>${x}</span></li>`).join('')}</ul>
         </div>
       </div>
     </div>
@@ -964,7 +976,7 @@ function viewSafety(){
     <div class="card" style="margin-bottom:16px"><p style="margin:0">${t('limitation')}</p></div>
     <div class="card" style="margin-bottom:16px">
       <h3>${t('notfor_h')}</h3>
-      <ul class="clean" style="color:#7a3d00">${I18N[lang].notfor.map(x=>`<li>✕ ${x}</li>`).join('')}</ul>
+      <ul class="clean ticklist" style="color:#7a3d00">${I18N[lang].notfor.map(x=>`<li><span style="color:var(--warn)">${ico('x',18)}</span><span>${x}</span></li>`).join('')}</ul>
       <p class="muted" style="margin:0">${t('ns_emergency')}</p>
     </div>
     <div class="card" style="margin-bottom:16px"><h3>${eduItem('when-it-happens')[lang].title}</h3><div class="edu-body">${eduItem('when-it-happens')[lang].html}</div></div>
@@ -1177,7 +1189,7 @@ function addUpload(){
 }
 function renderUploadList(ep){
   if(!ep.uploads.length) return `<p class="muted" style="margin:0">—</p>`;
-  return ep.uploads.map((u,i)=>`<div class="list-row"><span class="badge-file">${(u.file_type||'').toString().split('/').pop().slice(0,4).toUpperCase()||'ECG'}</span><div style="flex:1"><div><b>#${i+1}</b> ${esc(u.file_name)}</div><div class="muted" style="font-size:.8rem">${fmtDateTime(u.recorded_at)} · ${symLabel(u.symptom_type)}</div></div>${u.red_flag_during_upload?`<span class="pill danger">⚑</span>`:''}${u.clinician_classification?`<span class="pill good">✓</span>`:`<span class="pill neutral">…</span>`}</div>`).join('');
+  return ep.uploads.map((u,i)=>`<div class="list-row"><span class="badge-file">${(u.file_type||'').toString().split('/').pop().slice(0,4).toUpperCase()||'ECG'}</span><div style="flex:1"><div><b>#${i+1}</b> ${esc(u.file_name)}</div><div class="muted" style="font-size:.8rem">${fmtDateTime(u.recorded_at)} · ${symLabel(u.symptom_type)}</div></div>${u.red_flag_during_upload?`<span class="pill danger">${ico('flag',13)}</span>`:''}${u.clinician_classification?`<span class="pill good">${ico('check',13)}</span>`:`<span class="pill neutral">…</span>`}</div>`).join('');
 }
 function symLabel(s){ const m={none:t('st_none'),palpitations:t('st_palp'),dizziness:t('st_dizzy'),chest_discomfort:t('st_chest'),breathlessness:t('st_breath'),other:t('st_other')}; return m[s]||s||''; }
 function requestReport(epId){ const ep=DB.episodes.find(e=>e.id===epId); if(!ep) return; ep.status=ep.red_flag?'ESCALATED':'AWAITING_REVIEW'; ep.escalated=ep.red_flag; save(); go('dashboard'); }
@@ -1208,9 +1220,9 @@ function viewReport(param){
   const ep=DB.episodes.find(e=>e.id===param)||DB.episodes.find(e=>e.report&&e.report.signed_at);
   if(!ep||!ep.report||!ep.report.signed_at){ app().innerHTML=`<div class="wrap narrow"><div class="card"><h1>${t('rep_h')}</h1><div class="note info">${t('rep_notready')}</div><button class="btn ghost" onclick="go('dashboard')">${t('nav_dash')}</button></div></div>`; return; }
   app().innerHTML=`<div class="wrap narrow">
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"><button class="btn" onclick="downloadReport('${ep.id}')">⬇ ${t('rep_download')}</button><button class="btn ghost" onclick="go('dashboard')">${t('nav_dash')}</button></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"><button class="btn" onclick="downloadReport('${ep.id}')">${ico('download',18)} ${t('rep_download')}</button><button class="btn ghost" onclick="go('dashboard')">${t('nav_dash')}</button></div>
     ${reportHTML(ep)}
-    <div class="card" style="margin-top:16px"><h3>${t('rep_share_h')}</h3><p class="muted">${t('rep_share_p')}</p><button class="btn ghost" onclick="shareWA()">🟢 ${t('rep_share_btn')}</button></div>
+    <div class="card" style="margin-top:16px"><h3>${t('rep_share_h')}</h3><p class="muted">${t('rep_share_p')}</p><button class="btn ghost" onclick="shareWA()">${ico('share',18)} ${t('rep_share_btn')}</button></div>
   </div>`;
 }
 function reportHTML(ep){
@@ -1278,7 +1290,7 @@ function monthMetrics(){
 }
 function queueRows(list){
   if(!list.length) return '';
-  return list.map(ep=>{ const el=ep.eligibility||{}; const flag=(ep.escalated||ep.red_flag)?`<span class="pill danger">⚑</span>`:(ep.qa_assigned?`<span class="pill warn">QA</span>`:`<span class="pill neutral">—</span>`);
+  return list.map(ep=>{ const el=ep.eligibility||{}; const flag=(ep.escalated||ep.red_flag)?`<span class="pill danger">${ico('flag',13)}</span>`:(ep.qa_assigned?`<span class="pill warn">QA</span>`:`<span class="pill neutral">—</span>`);
     return `<tr><td>${ep.id.slice(-6)}</td><td>${cName(el.country)}</td><td>${el.age||'—'} / ${(el.sex||'').slice(0,1).toUpperCase()}</td><td>${money(ep.selected_amount_gbp)}</td><td>${ep.uploads.length}</td><td><span class="pill ${ep.status==='ESCALATED'?'danger':(ep.status==='REPORT_READY'?'good':'neutral')}">${t('st_'+ep.status)||ep.status}</span></td><td>${flag}</td><td>${daysLeft(ep)}</td><td><button class="btn sm" onclick="go('admin','${ep.id}')">${t('adm_open')}</button></td></tr>`;
   }).join('');
 }
@@ -1298,7 +1310,7 @@ function viewAdminEpisode(epId){
   const el=ep.eligibility||{}, r=ep.report||{};
   app().innerHTML=`<div class="wrap">
     <button class="btn sm ghost" onclick="go('admin')">← ${t('adm_back')}</button>
-    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px"><h1 style="margin:0">${ep.id.slice(-6)}</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill ${ep.status==='ESCALATED'?'danger':'neutral'}">${t('st_'+ep.status)||ep.status}</span>${ep.red_flag?`<span class="pill danger">⚑ red-flag upload</span>`:''}</div></div>
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px"><h1 style="margin:0">${ep.id.slice(-6)}</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="pill ${ep.status==='ESCALATED'?'danger':'neutral'}">${t('st_'+ep.status)||ep.status}</span>${ep.red_flag?`<span class="pill danger">${ico('flag',13)} red-flag upload</span>`:''}</div></div>
     <div class="grid cols-2" style="margin:16px 0">
       <div class="card"><h3>${t('elig_h')}</h3><div class="kv"><div class="muted">${t('f_country')}</div><div>${cName(el.country)}</div><div class="muted">${t('f_age')} / ${t('f_sex')}</div><div>${el.age} / ${el.sex}</div><div class="muted">${t('f_symptom')}</div><div>${el.main_symptom}</div><div class="muted">${t('f_duration')}</div><div>${el.symptom_duration||'—'}</div><div class="muted">${t('f_freq')}</div><div>${el.symptom_frequency||'—'}</div><div class="muted">${t('f_device')}</div><div>${el.device_used||'—'}</div><div class="muted">${t('f_known')}</div><div>${el.known_heart_condition?t('yes'):t('no')}</div><div class="muted">${t('f_meds')}</div><div>${esc(el.current_medications)||'—'}</div></div>${el.symptom_description?`<p class="muted" style="margin-top:10px"><b>${t('f_desc')}:</b> ${esc(el.symptom_description)}</p>`:''}</div>
       <div class="card"><h3>${t('payp_buying_h')}</h3><div class="kv"><div class="muted">${t('payp_selected')}</div><div>${money(ep.selected_amount_gbp)}</div><div class="muted">${t('dash_start')}</div><div>${fmtDate(ep.diary_start_at)}</div><div class="muted">${t('dash_end')}</div><div>${fmtDate(ep.diary_end_at)}</div><div class="muted">${t('dash_uploads')}</div><div>${ep.uploads.length} / ${CFG.MAX_UPLOADS}</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn sm danger" onclick="escalate('${ep.id}')">${t('adm_escal_btn')}</button><button class="btn sm ghost" onclick="assignQA('${ep.id}')">${t('adm_assign_qa')}</button></div>${ep.qa_assigned?`<div class="note warn" style="margin-top:10px">QA: ${qaLabel(ep.qa_type)} — physiologist review queued.</div>`:''}</div>
@@ -1320,7 +1332,7 @@ function viewAdminEpisode(epId){
 }
 function ecgRow(ep,u,i){
   return `<div class="list-row" style="align-items:flex-start;flex-wrap:wrap"><span class="badge-file">${(u.file_type||'ECG').toString().split('/').pop().slice(0,4).toUpperCase()}</span>
-    <div style="flex:1;min-width:200px"><div><b>#${i+1}</b> ${esc(u.file_name)} ${u.red_flag_during_upload?'<span class="pill danger">⚑</span>':''}</div><div class="muted" style="font-size:.8rem">${fmtDateTime(u.recorded_at)} · ${u.symptoms_present?'symptomatic':'asymptomatic'} · ${symLabel(u.symptom_type)}</div>${u.patient_note?`<div class="muted" style="font-size:.82rem">📝 ${esc(u.patient_note)}</div>`:''}${ecgSVG()}</div>
+    <div style="flex:1;min-width:200px"><div><b>#${i+1}</b> ${esc(u.file_name)} ${u.red_flag_during_upload?`<span class="pill danger">${ico('flag',13)}</span>`:''}</div><div class="muted" style="font-size:.8rem">${fmtDateTime(u.recorded_at)} · ${u.symptoms_present?'symptomatic':'asymptomatic'} · ${symLabel(u.symptom_type)}</div>${u.patient_note?`<div class="muted" style="font-size:.82rem">📝 ${esc(u.patient_note)}</div>`:''}${ecgSVG()}</div>
     <div style="display:flex;flex-direction:column;gap:6px;min-width:175px"><select onchange="classify('${ep.id}','${u.id}','class',this.value)" style="font-size:.82rem;padding:6px 8px"><option value="">${t('adm_classify')}…</option>${Object.keys(CLASS_OPTS).map(k=>`<option value="${k}" ${u.clinician_classification===k?'selected':''}>${CLASS_OPTS[k][lang]}</option>`).join('')}</select><select onchange="classify('${ep.id}','${u.id}','qual',this.value)" style="font-size:.82rem;padding:6px 8px"><option value="">${t('adm_quality')}…</option>${Object.keys(QUAL_OPTS).map(k=>`<option value="${k}" ${u.signal_quality===k?'selected':''}>${QUAL_OPTS[k][lang]}</option>`).join('')}</select></div></div>`;
 }
 function classify(epId,uId,which,val){ const ep=DB.episodes.find(e=>e.id===epId); if(!ep)return; const u=ep.uploads.find(x=>x.id===uId); if(!u)return; if(which==='class')u.clinician_classification=val||null; else u.signal_quality=val||null; u.reviewed_at=nowISO(); if(ep.status==='AWAITING_REVIEW')ep.status='IN_REVIEW'; save(); }
