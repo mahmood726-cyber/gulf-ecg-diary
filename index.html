@@ -539,7 +539,7 @@ const I18N={
   rf:['Are you currently having chest pain, pressure, heaviness, or tightness?','Have you fainted, collapsed, or nearly collapsed?','Are you severely breathless at rest?','Do you have weakness of one side of the body, facial droop, speech difficulty, or possible stroke symptoms?','Do you feel extremely unwell or unsafe at home?','Have you been told you have an unstable or serious heart condition needing urgent care?','Have you had a recent hospital admission for heart symptoms?','Are you seeking help for an emergency now?','Are your palpitations happening right now and not settling?'],
   excl_h:'A few more questions',excl_intro:'These do not mean an emergency, but they may mean an online ECG diary is not the right first step for you.',
   excl:['Are you pregnant, or could you be?','Do you have a pacemaker or an implanted defibrillator (ICD)?','Has a close family member died suddenly of a heart problem, or do your palpitations come on with physical exertion?'],
-  refer_h:'Best handled by your own doctor first',refer_p:'Your answers suggest you should speak with your local doctor or cardiologist before using an online ECG diary. This is not an emergency, but a clinician who knows your history should guide the next step.',
+  refer_h:'Best handled by your own doctor first',refer_p:'Your answers suggest you should speak with your local doctor or cardiologist before using an online ECG diary. This is not an emergency, but a clinician who knows your history should guide the next step.',refer_because:'This is because you told us:',
   age_h:'This service is for adults',age_p:'This ECG diary is intended for people aged 18 and over. For a child or teenager with palpitations, please arrange review through a local doctor or paediatric service.',
   elig_submit:'Check my eligibility',elig_need:'Please complete all required questions, including every safety question.',
   ns_h:'This service is not suitable for your symptoms',
@@ -640,7 +640,7 @@ const I18N={
   rf:['هل تعاني حالياً من ألم أو ضغط أو ثقل أو ضيق في الصدر؟','هل أُغمي عليك أو فقدت وعيك أو كدت أن تفقده؟','هل تعاني من ضيق شديد في التنفّس أثناء الراحة؟','هل لديك ضعف في أحد جانبي الجسم أو تدلٍّ في الوجه أو صعوبة في الكلام أو أعراض سكتة محتملة؟','هل تشعر بتوعّك شديد أو بعدم الأمان في المنزل؟','هل قيل لك إن لديك حالة قلبية غير مستقرّة أو خطيرة تحتاج رعاية عاجلة؟','هل دخلت المستشفى مؤخراً بسبب أعراض قلبية؟','هل تطلب المساعدة لحالة طارئة الآن؟','هل يحدث الخفقان لديك الآن ولا يهدأ؟'],
   excl_h:'بضعة أسئلة إضافية',excl_intro:'هذه لا تعني حالة طارئة، لكنها قد تعني أن مذكرة التخطيط الإلكترونية ليست الخطوة الأولى المناسبة لك.',
   excl:['هل أنتِ حامل أو من المحتمل أن تكوني حاملاً؟','هل لديك جهاز تنظيم ضربات القلب أو مزيل رجفان مزروع (ICD)؟','هل توفّي أحد أقاربك المقرّبين فجأة بسبب مشكلة قلبية، أو هل يبدأ الخفقان لديك مع المجهود البدني؟'],
-  refer_h:'يُفضّل أن يتولّاها طبيبك أولاً',refer_p:'تشير إجاباتك إلى أنه ينبغي أن تتحدّث مع طبيبك المحلي أو طبيب القلب قبل استخدام مذكرة تخطيط إلكترونية. هذه ليست حالة طارئة، لكن من الأفضل أن يوجّهك طبيب يعرف تاريخك المرضي.',
+  refer_h:'يُفضّل أن يتولّاها طبيبك أولاً',refer_p:'تشير إجاباتك إلى أنه ينبغي أن تتحدّث مع طبيبك المحلي أو طبيب القلب قبل استخدام مذكرة تخطيط إلكترونية. هذه ليست حالة طارئة، لكن من الأفضل أن يوجّهك طبيب يعرف تاريخك المرضي.',refer_because:'وذلك لأنك أخبرتنا بما يلي:',
   age_h:'هذه الخدمة للبالغين',age_p:'هذه المذكرة مخصّصة لمن أعمارهم 18 عاماً فأكثر. أمّا الطفل أو المراهق الذي يعاني من الخفقان، فيرجى ترتيب المراجعة عبر طبيب محلي أو خدمة أطفال.',
   elig_submit:'تحقّق من أهليتي',elig_need:'يرجى إكمال جميع الأسئلة المطلوبة، بما في ذلك جميع أسئلة السلامة.',
   ns_h:'هذه الخدمة غير مناسبة لأعراضك',
@@ -1004,6 +1004,9 @@ function viewNotSuitable(){
     h=t('age_h'); p=t('age_p'); pillCls='warn'; cardStyle='border-color:#eedcbf;background:#fffaf2'; titleStyle='color:#7a3d00';
   } else if(tag==='NOT_ELIGIBLE_REFER'){
     h=t('refer_h'); p=t('refer_p'); pillCls='neutral'; cardStyle='border-color:#cfe4e6;background:#f1f7f6'; titleStyle='color:#0a4d59';
+    const ex=(DB.draftElig&&DB.draftElig.exclusions)||[];
+    const reasons=I18N[lang].excl.filter((q,i)=>ex[i]==='yes');
+    if(reasons.length) extra=`<div class="note info" style="margin:14px 0"><b>${t('refer_because')}</b><ul class="clean" style="margin:8px 0 0">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul></div>`;
   } else {
     h=t('ns_h'); p=t('ns_p'); extra=`<div class="note danger" style="margin:14px 0">${t('ns_emergency')}</div>`;
   }
