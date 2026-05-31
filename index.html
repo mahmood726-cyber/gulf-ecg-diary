@@ -10,7 +10,7 @@
 <meta property="og:type" content="website" />
 <style>
   :root{
-    --bg:#f6f4ef; --surface:#ffffff; --ink:#16282f; --muted:#5e727b;
+    --bg:#f6f4ef; --surface:#ffffff; --ink:#16282f; --muted:#4d616a;
     --line:#e6e0d4; --line2:#e3ebee;
     --brand:#0f6f80; --brand-dk:#0a4d59; --brand-soft:#e6f1f2;
     --sage:#3f7d5e; --sage-soft:#e6f1ea;
@@ -27,12 +27,12 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
-  body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-  html[dir=rtl] body{font-family:"Segoe UI","Noto Sans Arabic",Tahoma,system-ui,sans-serif}
+  body{font-family:var(--sans);font-size:17px;background:var(--bg);color:var(--ink);line-height:1.62;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+  html[dir=rtl] body{font-family:"Noto Naskh Arabic","Noto Sans Arabic","Geeza Pro","Segoe UI",Tahoma,system-ui,sans-serif}
   a{color:var(--brand-dk);text-decoration:none}
   a:hover{text-decoration:underline}
   h1,h2,h3,h4{font-family:var(--serif);color:var(--ink);margin:0 0 .5em;font-weight:600;letter-spacing:-.01em}
-  html[dir=rtl] h1,html[dir=rtl] h2,html[dir=rtl] h3,html[dir=rtl] h4{font-family:"Segoe UI","Noto Sans Arabic",Tahoma,sans-serif}
+  html[dir=rtl] h1,html[dir=rtl] h2,html[dir=rtl] h3,html[dir=rtl] h4{font-family:"Noto Kufi Arabic","Noto Sans Arabic","Geeza Pro","Segoe UI",Tahoma,sans-serif}
   h1{font-size:clamp(1.7rem,4.6vw,2.7rem);line-height:1.15}
   h2{font-size:clamp(1.35rem,3.2vw,2rem);line-height:1.2}
   h3{font-size:1.18rem}
@@ -100,7 +100,7 @@
   .hero .wrap{padding-top:54px;padding-bottom:56px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
   @media(max-width:880px){.hero .wrap{grid-template-columns:1fr;padding-top:36px;padding-bottom:36px}}
   .hero h1{margin-bottom:.35em}
-  .hero .sub{font-size:1.18rem;color:#33535d;max-width:34ch;font-family:var(--serif);font-style:italic}
+  .hero .sub{font-size:1.2rem;color:#2f4d57;max-width:36ch;font-family:var(--serif)}
   html[dir=rtl] .hero .sub{font-family:inherit;font-style:normal}
   .hero-card{background:#fff;border:1px solid var(--line2);border-radius:20px;box-shadow:var(--shadow);padding:22px;position:relative;overflow:hidden}
   .ecg-strip{width:100%;height:90px;display:block}
@@ -204,14 +204,16 @@
   /* education */
   .edu-card{display:block;background:#fff;border:1px solid var(--line2);border-radius:14px;padding:20px;box-shadow:var(--shadow-sm);transition:.16s;cursor:pointer;height:100%}
   .edu-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);text-decoration:none;border-color:#cfe4e6}
-  .edu-ico{width:42px;height:42px;border-radius:11px;background:var(--brand-soft);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:12px}
+  .edu-ico{width:42px;height:42px;border-radius:11px;background:var(--brand-soft);color:var(--brand-dk);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+  .ico{display:block;flex:0 0 auto}
+  .trust-row .ico{color:var(--brand)}
   .edu-card h3{margin-bottom:4px;font-size:1.08rem}
   .edu-card p{margin:0;font-size:.9rem;color:var(--muted)}
   .edu-body{font-size:1.02rem;color:#314a52}
   .edu-body h2{margin-top:36px}
   .edu-body h3{margin-top:24px;font-size:1.15rem}
   .anchor-nav{position:sticky;top:78px;align-self:start;font-size:.88rem;display:grid;gap:3px}
-  .anchor-nav a{padding:6px 10px;border-radius:8px;color:#4a626a}
+  .anchor-nav a{padding:6px 10px;border-radius:8px;color:#43585f;display:flex;align-items:center;gap:8px}
   .anchor-nav a:hover{background:var(--brand-soft);text-decoration:none;color:var(--brand-dk)}
   @media(max-width:880px){.anchor-nav{position:static;display:none}}
   .edu-layout{display:grid;grid-template-columns:230px 1fr;gap:34px}
@@ -220,6 +222,8 @@
     background:radial-gradient(circle,var(--brand-soft),#fff);border:2px solid var(--brand);color:var(--brand-dk);font-family:var(--serif);font-size:1.1rem;text-align:center;
     animation:breathe 10s ease-in-out infinite}
   @keyframes breathe{0%,100%{transform:scale(.78)}40%{transform:scale(1)}60%{transform:scale(1)}}
+  .clin-avatar{width:84px;height:84px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:1.9rem;font-weight:600;color:#fff;background:linear-gradient(150deg,#0f6f80,#0a4d59);box-shadow:var(--shadow-sm);letter-spacing:.02em}
+  @media (prefers-reduced-motion: reduce){.breath-ring{animation:none}}
 </style>
 </head>
 <body>
@@ -495,6 +499,8 @@ const I18N={
 
   reassure_h:'Many palpitations are distressing but not dangerous',
   reassure_p:'Palpitations are one of the most common reasons people see a cardiologist. The aim of this service is not to alarm you — it is to capture what your heart is actually doing, so uncertainty can be replaced with understanding.',
+  clinician_h:'Who reviews your ECG',clinician_name:'Dr Mahmood Ahmad',clinician_role:'Specialist in Cardiology',clinician_hosp:'Royal Free Hospital, London, UK',
+  clinician_blurb:'Every ECG diary is reviewed personally by a clinician — not an algorithm. Selected cases also undergo physiologist quality review or escalation.',
 
   how_h:'How it works',
   how:[
@@ -597,7 +603,9 @@ const I18N={
   hero_card_pay:'ادفع أي مبلغ',
 
   reassure_h:'كثير من حالات الخفقان مزعجة لكنها ليست خطيرة',
-  reassure_p:'الخفقان من أكثر الأسباب شيوعاً لزيارة طبيب القلب. هدف هذه الخدمة ليس إخافتك — بل التقاط ما يفعله قلبك فعلاً، لكي يحل الفهم محل الغموض.',
+  reassure_p:'الخفقان من أكثر الأسباب شيوعاً لزيارة طبيب القلب. وهدف هذه الخدمة ليس إخافتك — بل التقاط ما يفعله قلبك فعلاً، لكي يحلّ الفهم محلّ الغموض.',
+  clinician_h:'مَن يراجع تخطيطك',clinician_name:'الدكتور محمود أحمد',clinician_role:'أخصائي أمراض القلب',clinician_hosp:'مستشفى رويال فري، لندن، المملكة المتحدة',
+  clinician_blurb:'يراجع كل مذكرة تخطيط طبيبٌ بنفسه — لا خوارزمية. كما تخضع حالات مختارة لمراجعة جودة من اختصاصي فسيولوجي أو لمراجعة تصعيد.',
 
   how_h:'كيف تعمل الخدمة',
   how:[
@@ -708,13 +716,39 @@ function addDays(iso,n){ const d=new Date(iso); d.setDate(d.getDate()+n); return
 function daysLeft(ep){ return Math.max(0,Math.ceil((new Date(ep.diary_end_at)-new Date())/864e5)); }
 function esc(s){ return (s||'').toString().replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c])); }
 
+/* ---------- Monoline SVG icon set (replaces emoji for a clinical, consistent look) ---------- */
+const ICONS={
+ heart:'<path d="M12 20s-7-4.6-9.3-9.2C1 7.2 3 4 6.2 4 8.3 4 9.6 5.2 12 8c2.4-2.8 3.7-4 5.8-4C21 4 23 7.2 21.3 10.8 19 15.4 12 20 12 20Z"/>',
+ cup:'<path d="M4 8h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M16 9h2a2 2 0 0 1 0 4h-2"/><path d="M7 3v2M10 3v2M13 3v2"/>',
+ loop:'<path d="M4 9a8 8 0 0 1 13-3l3 3"/><path d="M20 5v4h-4"/><path d="M20 15a8 8 0 0 1-13 3l-3-3"/><path d="M4 19v-4h4"/>',
+ wind:'<path d="M3 8h9a3 3 0 1 0-3-3"/><path d="M3 12h14a3 3 0 1 1-3 3"/><path d="M3 16h7a2.5 2.5 0 1 1-2.5 2.5"/>',
+ life:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><path d="M5.2 5.2l4.4 4.4M18.8 5.2l-4.4 4.4M5.2 18.8l4.4-4.4M18.8 18.8l-4.4-4.4"/>',
+ snow:'<path d="M12 2v20M3.3 7 20.7 17M20.7 7 3.3 17"/><path d="M9 4l3 3 3-3M9 20l3-3 3 3M4 9l1 3-3 1M20 9l-1 3 3 1"/>',
+ moon:'<path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z"/>',
+ glass:'<path d="M6 3h12l-1.5 8a4.5 4.5 0 0 1-9 0L6 3Z"/><path d="M12 16v5M8 21h8"/>',
+ trending:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+ pill:'<rect x="3" y="9" width="18" height="6" rx="3"/><path d="M12 9v6"/>',
+ phone:'<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/>',
+ activity:'<path d="M2 12h4l3 8 4-16 3 8h6"/>',
+ book:'<path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2V4Z"/><path d="M5 16.5h13"/>',
+ userCheck:'<circle cx="9" cy="8" r="3.4"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M15.5 12.5l2 2 4-4"/>',
+ lock:'<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+ globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 2.6 15.3 0 18M12 3c-2.6 2.7-2.6 15.3 0 18"/>',
+ search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.2-4.2"/>',
+ alert:'<path d="M12 3 2 20h20L12 3Z"/><path d="M12 9.5v4.5M12 17v.5"/>',
+ upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 20h16"/>',
+};
+const EMOJI2ICON={'🫀':'heart','☕':'cup','🔁':'loop','🌬️':'wind','🆘':'life','🧊':'snow','😴':'moon','🍷':'glass','🏃':'trending','💊':'pill','📱':'phone','📈':'activity','📖':'book'};
+function ico(name,size){ return `<svg class="ico" width="${size||24}" height="${size||24}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name]||ICONS.activity}</svg>`; }
+function icoFor(emoji,size){ return ico(EMOJI2ICON[emoji]||'activity',size); }
+
 function ecgSVG(){ return `<svg class="ecg-strip" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true"><rect width="600" height="90" fill="#f1f7f6"/><path d="M0 54 H60 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H120 H180 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H240 H300 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H360 H420 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H480 H540 l8 0 l4 -7 l5 18 l6 -42 l6 56 l5 -25 H600" fill="none" stroke="#0f6f80" stroke-width="2"/></svg>`; }
 function stepRow(n,h,b){ return `<div class="jrow"><div class="jdot">${n}</div><div><h3 style="margin:.1em 0 .2em">${h}</h3><p class="muted" style="margin:0">${b}</p></div></div>`; }
 function loopDiagram(l){
   const items = l==='ar'
     ? ['تشعر بنبضة','يزداد الانتباه للقلب','يرتفع القلق','تلاحظ نبضات أكثر']
     : ['You feel a beat','Attention turns to the heart','Anxiety rises','You notice even more'];
-  return `<div class="grid cols-4" style="margin:14px 0">${items.map((x,i)=>`<div class="card center" style="padding:16px"><div style="font-size:1.3rem">${['💓','🔍','😟','🔁'][i]}</div><b style="font-size:.92rem">${x}</b></div>`).join('')}</div>`;
+  return `<div class="grid cols-4" style="margin:14px 0">${items.map((x,i)=>`<div class="card center" style="padding:16px"><div style="color:var(--brand-dk)">${[ico('heart',22),ico('search',22),ico('alert',22),ico('loop',22)][i]}</div><b style="font-size:.92rem">${x}</b></div>`).join('')}</div>`;
 }
 function breathBlock(l){
   return `<div class="breath-ring">${l==='ar'?'شهيق 4<br>زفير 6':'In 4<br>Out 6'}</div>`;
@@ -779,7 +813,7 @@ function viewHome(){
           <button class="btn ghost lg" onclick="go('learn')">${t('cta_learn')}</button>
         </div>
         <div class="trust-row">
-          <span>👨‍⚕️ ${t('trust_human')}</span><span>🔒 ${t('trust_private')}</span><span>🌙 ${t('trust_gulf')}</span>
+          <span>${ico('userCheck',18)} ${t('trust_human')}</span><span>${ico('lock',18)} ${t('trust_private')}</span><span>${ico('globe',18)} ${t('trust_gulf')}</span>
         </div>
       </div>
       <div class="hero-card">
@@ -800,6 +834,21 @@ function viewHome(){
       <span class="pill good" style="margin-bottom:14px">${t('not_emergency')} · ${lang==='ar'?'خدمة هادئة':'a calm service'}</span>
       <h2>${t('reassure_h')}</h2>
       <p class="lead">${t('reassure_p')}</p>
+    </div>
+  </section>
+
+  <section class="band tint">
+    <div class="wrap">
+      <div class="card" style="display:flex;gap:22px;align-items:center;flex-wrap:wrap;max-width:840px;margin:0 auto">
+        <div class="clin-avatar">MA</div>
+        <div style="flex:1;min-width:240px">
+          <span class="kicker">${t('clinician_h')}</span>
+          <h3 style="margin:6px 0 2px;font-size:1.35rem">${t('clinician_name')}</h3>
+          <div style="font-weight:600;color:var(--brand-dk)">${t('clinician_role')}</div>
+          <div class="muted" style="font-size:.9rem">${t('clinician_hosp')}</div>
+          <p style="margin:10px 0 0">${t('clinician_blurb')}</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -858,7 +907,7 @@ function viewHome(){
     </div>
   </section>`;
 }
-function eduCardHTML(e){ const c=e[lang]; return `<a class="edu-card" href="#/learn/${e.id}"><div class="edu-ico">${e.icon}</div><h3>${c.title}</h3><p>${c.teaser}</p></a>`; }
+function eduCardHTML(e){ const c=e[lang]; return `<a class="edu-card" href="#/learn/${e.id}"><div class="edu-ico">${icoFor(e.icon,24)}</div><h3>${c.title}</h3><p>${c.teaser}</p></a>`; }
 
 function viewHow(){
   const m=I18N[lang];
@@ -891,9 +940,9 @@ function viewLearnArticle(id){
   app().innerHTML=`<div class="wrap">
     <a class="navlink" href="#/learn" style="padding-inline-start:0">← ${t('learn_back')}</a>
     <div class="edu-layout" style="margin-top:14px">
-      <nav class="anchor-nav">${EDU.map(x=>`<a href="#/learn/${x.id}" style="${x.id===id?'background:var(--brand-soft);color:var(--brand-dk);font-weight:600':''}">${x.icon} ${x[lang].title}</a>`).join('')}</nav>
+      <nav class="anchor-nav">${EDU.map(x=>`<a href="#/learn/${x.id}" style="${x.id===id?'background:var(--brand-soft);color:var(--brand-dk);font-weight:600':''}">${icoFor(x.icon,16)} ${x[lang].title}</a>`).join('')}</nav>
       <article>
-        <div class="edu-ico" style="width:52px;height:52px;font-size:1.6rem">${e.icon}</div>
+        <div class="edu-ico" style="width:52px;height:52px">${icoFor(e.icon,28)}</div>
         <h1>${c.title}</h1>
         <div class="note warn" style="margin-bottom:18px">${lang==='ar'?'الأرقام أدناه تلخّص أبحاثاً منشورة وهي معلومات عامة، وليست تنبؤاً لأي شخص بعينه ولا نصيحة طبية شخصية.':'Figures below summarise published research and are general information — not a prediction for any individual, and not personal medical advice.'}</div>
         <div class="edu-body">${c.html}</div>
@@ -1087,7 +1136,7 @@ function viewUpload(){
       <div class="cap-bar"><i style="width:${used/CFG.MAX_UPLOADS*100}%"></i></div>
     </div>
     ${capFull?`<div class="note warn" style="margin-bottom:16px">${t('payp_cap_full')}</div>`:full?`<div class="note warn" style="margin-bottom:16px">${t('up_full')}</div>`:`<div class="card" style="margin-bottom:16px">
-      <button type="button" class="upload-drop" aria-label="${t('up_drop')}" onclick="document.getElementById('ecgFile').click()"><div style="font-size:1.7rem" aria-hidden="true">⬆</div><div id="fileLabel">${t('up_drop')}</div></button>
+      <button type="button" class="upload-drop" aria-label="${t('up_drop')}" onclick="document.getElementById('ecgFile').click()"><div style="color:var(--brand-dk)">${ico('upload',30)}</div><div id="fileLabel">${t('up_drop')}</div></button>
       <input type="file" id="ecgFile" class="hidden" accept=".pdf,.png,.jpg,.jpeg,.csv,.txt,.xml" onchange="onFilePick(this)">
       <div class="grid cols-2" style="margin-top:14px">
         <div class="field"><label class="f" for="u_recorded">${t('up_recorded')}</label><input type="datetime-local" id="u_recorded" aria-label="${t('up_recorded')}"></div>
@@ -1176,7 +1225,7 @@ function reportHTML(ep){
     <h4>${t('adm_recommend')}</h4><p><span class="pill">${RECO_OPTS[r.recommendation]?RECO_OPTS[r.recommendation][lang]:r.recommendation}</span></p>
     <h4 style="color:#7a3d00">${t('safety_h')}</h4><p class="muted">${lang==='ar'?'هذه الخدمة ليست خدمة طوارئ. إذا ظهر لديك ألم في الصدر أو إغماء أو ضيق تنفّس شديد أو أعراض شبيهة بالسكتة أو شعرت بتوعّك خطير، اطلب الرعاية الطبية العاجلة محلياً.':'This service is not an emergency service. If you develop chest pain, fainting, severe breathlessness, stroke-like symptoms, or feel seriously unwell, seek urgent local medical care.'}</p>
     <h4>${lang==='ar'?'القيود':'Limitations'}</h4><p class="muted">${t('limitation')}</p>
-    <div style="border-top:1px solid var(--line2);margin-top:18px;padding-top:12px" class="kv"><div class="muted">${t('adm_signer')}</div><div>${esc(r.signed_by_name||'Dr M. (demo clinician)')}</div><div class="muted">${lang==='ar'?'التاريخ':'Date'}</div><div>${fmtDate(r.signed_at)}</div></div>
+    <div style="border-top:1px solid var(--line2);margin-top:18px;padding-top:12px" class="kv"><div class="muted">${t('adm_signer')}</div><div>${esc(r.signed_by_name||'Dr Mahmood Ahmad')}</div><div class="muted">${lang==='ar'?'التاريخ':'Date'}</div><div>${fmtDate(r.signed_at)}</div></div>
   </div>`;
 }
 function downloadReport(epId){
@@ -1263,7 +1312,7 @@ function viewAdminEpisode(epId){
       <div class="field"><label class="f">${t('adm_symcorr')}</label><textarea id="r_sym">${esc(r.symptom_correlation||'')}</textarea></div>
       <div class="field"><label class="f">${t('adm_comment')}</label><textarea id="r_comment">${esc(r.clinician_comment||'')}</textarea></div>
       <div class="field"><label class="f">${t('adm_recommend')}</label><select id="r_reco">${Object.keys(RECO_OPTS).map(k=>`<option value="${k}" ${r.recommendation===k?'selected':''}>${RECO_OPTS[k][lang]}</option>`).join('')}</select></div>
-      <div class="field"><label class="f">${t('adm_signer')}</label><input type="text" id="r_signer" value="${esc(r.signed_by_name||'Dr M. (demo clinician)')}"></div>
+      <div class="field"><label class="f">${t('adm_signer')}</label><input type="text" id="r_signer" value="${esc(r.signed_by_name||'Dr Mahmood Ahmad')}"></div>
       <div id="signMsg"></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn ghost" onclick="saveReport('${ep.id}',false)">Save draft</button><button class="btn" onclick="saveReport('${ep.id}',true)">${t('adm_sign')}</button></div>
     </div>
