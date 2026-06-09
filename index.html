@@ -3,6 +3,16 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- SUPERSEDED PROTOTYPE. The live product is https://gulfecg.com (repo: gulf-ecg-diary-app).
+     This static demo has mocked payments/uploads and a demo admin view; keep it out of search
+     so it can't compete with or confuse campaign traffic. -->
+<meta name="robots" content="noindex, nofollow" />
+<link rel="canonical" href="https://gulfecg.com/" />
+<script>
+  // Send live visitors to the real product (search crawlers ignore JS redirects; the
+  // noindex above handles them). Skip if explicitly opened with ?demo=1 for reference.
+  try { if (!/[?&]demo=1\b/.test(location.search)) location.replace("https://gulfecg.com/"); } catch (e) {}
+</script>
 <title>Gulf ECG Diary — Clinician-reviewed heart rhythm diary</title>
 <meta name="description" content="Clinician-reviewed single-lead ECG diary for palpitations and rhythm concerns. Evidence-based education and a calm, non-emergency rhythm review for the Gulf region." />
 <meta property="og:title" content="Gulf ECG Diary" />
