@@ -18,8 +18,8 @@ A production build would use the stack in the spec (Next.js + Supabase + Stripe 
 
 - Bilingual EN/AR with proper RTL layout and a calm, evidence-first clinical design.
 - A **Learn** library of patient education (palpitations, triggers, the attention loop, 4–6 breathing, vagal techniques, sleep, alcohol, weight/movement, omega-3 caution, single-lead ECG devices, HRV, ectopics/AF/SVT, the CAST lesson) — adapted from the owner's OpenPalp programme, with UK-specific terms replaced by Gulf-appropriate wording.
-- Eligibility + **8-question red-flag screen** that routes emergencies to `NOT_ELIGIBLE_EMERGENCY_ADVICE`.
-- **Payment slider £1–£149 with no default / no suggested amount** (button stays disabled until you choose).
+- Eligibility + **9-question red-flag screen** that routes emergencies to `NOT_ELIGIBLE_EMERGENCY_ADVICE`.
+- **Payment slider SAR 1–149 with no default / no suggested amount** (button stays disabled until you choose).
 - 7-day diary with a **20-upload-per-episode** cap and a platform **1,000-uploads-per-month** cap.
 - Patient dashboard, ECG upload with priority-flagging for concerning symptoms.
 - **Clinician/admin dashboard**: metrics, review queue + filters, per-ECG classification & signal-quality, consolidated report builder, sign/issue, escalate, physiologist-QA assignment.
